@@ -21,6 +21,7 @@ import { useTheme } from '../context/ThemeContext'
 gsap.registerPlugin(ScrollTrigger)
 
 const barData = [...icesStocks]
+  .filter(s => s.assessmentType !== 'escapement' && s.assessmentType !== 'ssb_only')
   .map(s => ({
     label: s.species
       .replace('Atlantic ', 'Atl. ')
@@ -186,8 +187,8 @@ export default function StockRanking() {
                   marginTop: '12px',
                 }}
               >
-                Figure 4. ICES stocks ranked by F/F<sub>MSY</sub> (2023). Dashed line = F<sub>MSY</sub>
-                reference point. Source: ICES SAG 2023.
+                Figure 4. ICES stocks ranked by F/F<sub>MSY</sub> (2023). Dashed line = F<sub>MSY</sub>{' '}
+                reference point. Excluded: European sprat (escapement-managed) and Capelin (SSB-only assessment). Source: ICES SAG 2023.
               </p>
             </div>
           )}
