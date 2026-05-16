@@ -37,6 +37,11 @@ const references = [
     text: 'Garcia, S.M. & Ye, Y., eds. (2018). Rebuilding of marine fisheries. Part 2: Case studies. FAO Fisheries and Aquaculture Technical Paper No. 630/2. Rome, FAO.',
     url: 'https://www.fao.org/3/ca0161en/CA0161EN.pdf',
   },
+  {
+    id: 'Branch2011',
+    text: 'Branch TA, Jensen OP, Ricard D, Ye Y, Hilborn R (2011). Contrasting global trends in marine fishery status obtained from catches and from stock assessments. Conserv Biol 25(4): 777–786.',
+    url: 'https://doi.org/10.1111/j.1523-1739.2011.01687.x',
+  },
 ]
 
 interface MethodBlock {

@@ -65,6 +65,7 @@ Applied to stocks outside ICES scope or lacking formal assessments. Two indicato
 - **7 of 12 proxy stocks** are Collapsed or Overexploited, including Atlantic horse mackerel (D = 0.04, τ = −0.79), Atlantic redfishes (D = 0.10, τ = −0.83), and American plaice (D = 0.08, τ = −0.71)
 - **3 proxy stocks** show significant positive trends: Atlantic mackerel (τ = 0.45, p < 0.001), Haddock (τ = 0.31, p = 0.028), Blue whiting (τ = 0.28, p = 0.038)
 - Both tracks agree on direction for overlapping species (cod, herring, mackerel, haddock, blue whiting, sprat) in 5 of 6 cases
+- **Atlantic mackerel and blue whiting diverge between tracks**: Declining under ICES assessment (F/F<sub>MSY</sub> > 1.1) but Recovering under FAO proxy — consistent with the catch-based proxy bias documented in Branch et al. (2011)
 
 ---
 
