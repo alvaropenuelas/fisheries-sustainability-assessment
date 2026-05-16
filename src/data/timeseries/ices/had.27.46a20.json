@@ -1,0 +1,372 @@
+{
+  "stock": "had.27.46a20",
+  "referencePoints": {
+    "fmsy": 0.2399,
+    "msybtrigger": 189765.0,
+    "fmsy_range": null
+  },
+  "series": [
+    {
+      "year": 1972,
+      "ssb": 424096.0,
+      "f": 0.798,
+      "f_fmsy": 3.3261,
+      "ssb_msybtrigger": 2.2349
+    },
+    {
+      "year": 1973,
+      "ssb": 399151.0,
+      "f": 0.769,
+      "f_fmsy": 3.2052,
+      "ssb_msybtrigger": 2.1034
+    },
+    {
+      "year": 1974,
+      "ssb": 315460.0,
+      "f": 0.789,
+      "f_fmsy": 3.2886,
+      "ssb_msybtrigger": 1.6624
+    },
+    {
+      "year": 1975,
+      "ssb": 274399.0,
+      "f": 0.891,
+      "f_fmsy": 3.7137,
+      "ssb_msybtrigger": 1.446
+    },
+    {
+      "year": 1976,
+      "ssb": 390777.0,
+      "f": 0.881,
+      "f_fmsy": 3.6721,
+      "ssb_msybtrigger": 2.0593
+    },
+    {
+      "year": 1977,
+      "ssb": 317479.0,
+      "f": 0.876,
+      "f_fmsy": 3.6512,
+      "ssb_msybtrigger": 1.673
+    },
+    {
+      "year": 1978,
+      "ssb": 153749.0,
+      "f": 0.897,
+      "f_fmsy": 3.7388,
+      "ssb_msybtrigger": 0.8102
+    },
+    {
+      "year": 1979,
+      "ssb": 130670.0,
+      "f": 0.843,
+      "f_fmsy": 3.5137,
+      "ssb_msybtrigger": 0.6886
+    },
+    {
+      "year": 1980,
+      "ssb": 178492.0,
+      "f": 0.768,
+      "f_fmsy": 3.2011,
+      "ssb_msybtrigger": 0.9406
+    },
+    {
+      "year": 1981,
+      "ssb": 280800.0,
+      "f": 0.633,
+      "f_fmsy": 2.6384,
+      "ssb_msybtrigger": 1.4797
+    },
+    {
+      "year": 1982,
+      "ssb": 328712.0,
+      "f": 0.646,
+      "f_fmsy": 2.6926,
+      "ssb_msybtrigger": 1.7322
+    },
+    {
+      "year": 1983,
+      "ssb": 259824.0,
+      "f": 0.734,
+      "f_fmsy": 3.0594,
+      "ssb_msybtrigger": 1.3692
+    },
+    {
+      "year": 1984,
+      "ssb": 218557.0,
+      "f": 0.776,
+      "f_fmsy": 3.2344,
+      "ssb_msybtrigger": 1.1517
+    },
+    {
+      "year": 1985,
+      "ssb": 257798.0,
+      "f": 0.819,
+      "f_fmsy": 3.4136,
+      "ssb_msybtrigger": 1.3585
+    },
+    {
+      "year": 1986,
+      "ssb": 236425.0,
+      "f": 0.884,
+      "f_fmsy": 3.6846,
+      "ssb_msybtrigger": 1.2459
+    },
+    {
+      "year": 1987,
+      "ssb": 167168.0,
+      "f": 0.934,
+      "f_fmsy": 3.893,
+      "ssb_msybtrigger": 0.8809
+    },
+    {
+      "year": 1988,
+      "ssb": 152660.0,
+      "f": 0.892,
+      "f_fmsy": 3.7179,
+      "ssb_msybtrigger": 0.8045
+    },
+    {
+      "year": 1989,
+      "ssb": 137670.0,
+      "f": 0.89,
+      "f_fmsy": 3.7096,
+      "ssb_msybtrigger": 0.7255
+    },
+    {
+      "year": 1990,
+      "ssb": 82458.0,
+      "f": 0.859,
+      "f_fmsy": 3.5804,
+      "ssb_msybtrigger": 0.4345
+    },
+    {
+      "year": 1991,
+      "ssb": 68151.0,
+      "f": 0.955,
+      "f_fmsy": 3.9805,
+      "ssb_msybtrigger": 0.3591
+    },
+    {
+      "year": 1992,
+      "ssb": 101708.0,
+      "f": 0.851,
+      "f_fmsy": 3.547,
+      "ssb_msybtrigger": 0.536
+    },
+    {
+      "year": 1993,
+      "ssb": 162404.0,
+      "f": 0.914,
+      "f_fmsy": 3.8096,
+      "ssb_msybtrigger": 0.8558
+    },
+    {
+      "year": 1994,
+      "ssb": 182443.0,
+      "f": 0.866,
+      "f_fmsy": 3.6095,
+      "ssb_msybtrigger": 0.9614
+    },
+    {
+      "year": 1995,
+      "ssb": 177369.0,
+      "f": 0.711,
+      "f_fmsy": 2.9635,
+      "ssb_msybtrigger": 0.9347
+    },
+    {
+      "year": 1996,
+      "ssb": 211447.0,
+      "f": 0.794,
+      "f_fmsy": 3.3094,
+      "ssb_msybtrigger": 1.1143
+    },
+    {
+      "year": 1997,
+      "ssb": 234682.0,
+      "f": 0.71,
+      "f_fmsy": 2.9593,
+      "ssb_msybtrigger": 1.2367
+    },
+    {
+      "year": 1998,
+      "ssb": 194014.0,
+      "f": 0.776,
+      "f_fmsy": 3.2344,
+      "ssb_msybtrigger": 1.0224
+    },
+    {
+      "year": 1999,
+      "ssb": 138994.0,
+      "f": 0.894,
+      "f_fmsy": 3.7263,
+      "ssb_msybtrigger": 0.7325
+    },
+    {
+      "year": 2000,
+      "ssb": 116634.0,
+      "f": 0.791,
+      "f_fmsy": 3.2969,
+      "ssb_msybtrigger": 0.6146
+    },
+    {
+      "year": 2001,
+      "ssb": 296282.0,
+      "f": 0.562,
+      "f_fmsy": 2.3425,
+      "ssb_msybtrigger": 1.5613
+    },
+    {
+      "year": 2002,
+      "ssb": 375280.0,
+      "f": 0.449,
+      "f_fmsy": 1.8715,
+      "ssb_msybtrigger": 1.9776
+    },
+    {
+      "year": 2003,
+      "ssb": 273645.0,
+      "f": 0.306,
+      "f_fmsy": 1.2754,
+      "ssb_msybtrigger": 1.442
+    },
+    {
+      "year": 2004,
+      "ssb": 190954.0,
+      "f": 0.322,
+      "f_fmsy": 1.3421,
+      "ssb_msybtrigger": 1.0063
+    },
+    {
+      "year": 2005,
+      "ssb": 137388.0,
+      "f": 0.392,
+      "f_fmsy": 1.6339,
+      "ssb_msybtrigger": 0.724
+    },
+    {
+      "year": 2006,
+      "ssb": 100297.0,
+      "f": 0.506,
+      "f_fmsy": 2.109,
+      "ssb_msybtrigger": 0.5285
+    },
+    {
+      "year": 2007,
+      "ssb": 112035.0,
+      "f": 0.488,
+      "f_fmsy": 2.034,
+      "ssb_msybtrigger": 0.5904
+    },
+    {
+      "year": 2008,
+      "ssb": 116241.0,
+      "f": 0.381,
+      "f_fmsy": 1.588,
+      "ssb_msybtrigger": 0.6126
+    },
+    {
+      "year": 2009,
+      "ssb": 89586.0,
+      "f": 0.328,
+      "f_fmsy": 1.3671,
+      "ssb_msybtrigger": 0.4721
+    },
+    {
+      "year": 2010,
+      "ssb": 89799.0,
+      "f": 0.305,
+      "f_fmsy": 1.2713,
+      "ssb_msybtrigger": 0.4732
+    },
+    {
+      "year": 2011,
+      "ssb": 124626.0,
+      "f": 0.294,
+      "f_fmsy": 1.2254,
+      "ssb_msybtrigger": 0.6567
+    },
+    {
+      "year": 2012,
+      "ssb": 145632.0,
+      "f": 0.287,
+      "f_fmsy": 1.1962,
+      "ssb_msybtrigger": 0.7674
+    },
+    {
+      "year": 2013,
+      "ssb": 114401.0,
+      "f": 0.293,
+      "f_fmsy": 1.2212,
+      "ssb_msybtrigger": 0.6029
+    },
+    {
+      "year": 2014,
+      "ssb": 88570.0,
+      "f": 0.371,
+      "f_fmsy": 1.5464,
+      "ssb_msybtrigger": 0.4667
+    },
+    {
+      "year": 2015,
+      "ssb": 79159.0,
+      "f": 0.449,
+      "f_fmsy": 1.8715,
+      "ssb_msybtrigger": 0.4171
+    },
+    {
+      "year": 2016,
+      "ssb": 118145.0,
+      "f": 0.374,
+      "f_fmsy": 1.5589,
+      "ssb_msybtrigger": 0.6226
+    },
+    {
+      "year": 2017,
+      "ssb": 116902.0,
+      "f": 0.337,
+      "f_fmsy": 1.4046,
+      "ssb_msybtrigger": 0.616
+    },
+    {
+      "year": 2018,
+      "ssb": 104240.0,
+      "f": 0.367,
+      "f_fmsy": 1.5297,
+      "ssb_msybtrigger": 0.5493
+    },
+    {
+      "year": 2019,
+      "ssb": 85379.0,
+      "f": 0.34,
+      "f_fmsy": 1.4171,
+      "ssb_msybtrigger": 0.4499
+    },
+    {
+      "year": 2020,
+      "ssb": 111103.0,
+      "f": 0.277,
+      "f_fmsy": 1.1546,
+      "ssb_msybtrigger": 0.5855
+    },
+    {
+      "year": 2021,
+      "ssb": 224921.0,
+      "f": 0.186,
+      "f_fmsy": 0.7753,
+      "ssb_msybtrigger": 1.1853
+    },
+    {
+      "year": 2022,
+      "ssb": 395652.0,
+      "f": 0.119,
+      "f_fmsy": 0.496,
+      "ssb_msybtrigger": 2.085
+    },
+    {
+      "year": 2023,
+      "ssb": 529443.0,
+      "ssb_msybtrigger": 2.79
+    }
+  ]
+}

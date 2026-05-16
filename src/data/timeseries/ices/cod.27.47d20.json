@@ -1,0 +1,428 @@
+{
+  "stock": "cod.27.47d20",
+  "referencePoints": {
+    "fmsy": 0.28,
+    "msybtrigger": 97740.0,
+    "fmsy_range": null
+  },
+  "series": [
+    {
+      "year": 1963,
+      "ssb": 129744.0,
+      "f": 0.467,
+      "f_fmsy": 1.6676,
+      "ssb_msybtrigger": 1.3274
+    },
+    {
+      "year": 1964,
+      "ssb": 138581.0,
+      "f": 0.515,
+      "f_fmsy": 1.839,
+      "ssb_msybtrigger": 1.4179
+    },
+    {
+      "year": 1965,
+      "ssb": 162757.0,
+      "f": 0.57,
+      "f_fmsy": 2.0354,
+      "ssb_msybtrigger": 1.6652
+    },
+    {
+      "year": 1966,
+      "ssb": 182574.0,
+      "f": 0.574,
+      "f_fmsy": 2.0497,
+      "ssb_msybtrigger": 1.868
+    },
+    {
+      "year": 1967,
+      "ssb": 205322.0,
+      "f": 0.618,
+      "f_fmsy": 2.2068,
+      "ssb_msybtrigger": 2.1007
+    },
+    {
+      "year": 1968,
+      "ssb": 209979.0,
+      "f": 0.656,
+      "f_fmsy": 2.3425,
+      "ssb_msybtrigger": 2.1483
+    },
+    {
+      "year": 1969,
+      "ssb": 208284.0,
+      "f": 0.61,
+      "f_fmsy": 2.1782,
+      "ssb_msybtrigger": 2.131
+    },
+    {
+      "year": 1970,
+      "ssb": 213929.0,
+      "f": 0.645,
+      "f_fmsy": 2.3032,
+      "ssb_msybtrigger": 2.1888
+    },
+    {
+      "year": 1971,
+      "ssb": 220614.0,
+      "f": 0.745,
+      "f_fmsy": 2.6603,
+      "ssb_msybtrigger": 2.2571
+    },
+    {
+      "year": 1972,
+      "ssb": 201619.0,
+      "f": 0.817,
+      "f_fmsy": 2.9174,
+      "ssb_msybtrigger": 2.0628
+    },
+    {
+      "year": 1973,
+      "ssb": 166614.0,
+      "f": 0.788,
+      "f_fmsy": 2.8138,
+      "ssb_msybtrigger": 1.7047
+    },
+    {
+      "year": 1974,
+      "ssb": 178411.0,
+      "f": 0.745,
+      "f_fmsy": 2.6603,
+      "ssb_msybtrigger": 1.8254
+    },
+    {
+      "year": 1975,
+      "ssb": 169146.0,
+      "f": 0.808,
+      "f_fmsy": 2.8852,
+      "ssb_msybtrigger": 1.7306
+    },
+    {
+      "year": 1976,
+      "ssb": 146131.0,
+      "f": 0.868,
+      "f_fmsy": 3.0995,
+      "ssb_msybtrigger": 1.4951
+    },
+    {
+      "year": 1977,
+      "ssb": 122529.0,
+      "f": 0.818,
+      "f_fmsy": 2.921,
+      "ssb_msybtrigger": 1.2536
+    },
+    {
+      "year": 1978,
+      "ssb": 118197.0,
+      "f": 0.925,
+      "f_fmsy": 3.303,
+      "ssb_msybtrigger": 1.2093
+    },
+    {
+      "year": 1979,
+      "ssb": 118543.0,
+      "f": 0.835,
+      "f_fmsy": 2.9817,
+      "ssb_msybtrigger": 1.2128
+    },
+    {
+      "year": 1980,
+      "ssb": 118543.0,
+      "f": 0.923,
+      "f_fmsy": 3.2959,
+      "ssb_msybtrigger": 1.2128
+    },
+    {
+      "year": 1981,
+      "ssb": 128378.0,
+      "f": 0.931,
+      "f_fmsy": 3.3245,
+      "ssb_msybtrigger": 1.3135
+    },
+    {
+      "year": 1982,
+      "ssb": 129400.0,
+      "f": 1.055,
+      "f_fmsy": 3.7672,
+      "ssb_msybtrigger": 1.3239
+    },
+    {
+      "year": 1983,
+      "ssb": 108670.0,
+      "f": 1.035,
+      "f_fmsy": 3.6958,
+      "ssb_msybtrigger": 1.1118
+    },
+    {
+      "year": 1984,
+      "ssb": 96563.0,
+      "f": 0.964,
+      "f_fmsy": 3.4423,
+      "ssb_msybtrigger": 0.988
+    },
+    {
+      "year": 1985,
+      "ssb": 92500.0,
+      "f": 0.92,
+      "f_fmsy": 3.2852,
+      "ssb_msybtrigger": 0.9464
+    },
+    {
+      "year": 1986,
+      "ssb": 80540.0,
+      "f": 0.999,
+      "f_fmsy": 3.5673,
+      "ssb_msybtrigger": 0.824
+    },
+    {
+      "year": 1987,
+      "ssb": 83513.0,
+      "f": 0.972,
+      "f_fmsy": 3.4709,
+      "ssb_msybtrigger": 0.8544
+    },
+    {
+      "year": 1988,
+      "ssb": 78012.0,
+      "f": 0.996,
+      "f_fmsy": 3.5566,
+      "ssb_msybtrigger": 0.7982
+    },
+    {
+      "year": 1989,
+      "ssb": 74712.0,
+      "f": 1.023,
+      "f_fmsy": 3.653,
+      "ssb_msybtrigger": 0.7644
+    },
+    {
+      "year": 1990,
+      "ssb": 66205.0,
+      "f": 0.949,
+      "f_fmsy": 3.3887,
+      "ssb_msybtrigger": 0.6774
+    },
+    {
+      "year": 1991,
+      "ssb": 66219.0,
+      "f": 0.935,
+      "f_fmsy": 3.3387,
+      "ssb_msybtrigger": 0.6775
+    },
+    {
+      "year": 1992,
+      "ssb": 68143.0,
+      "f": 0.907,
+      "f_fmsy": 3.2388,
+      "ssb_msybtrigger": 0.6972
+    },
+    {
+      "year": 1993,
+      "ssb": 69976.0,
+      "f": 0.977,
+      "f_fmsy": 3.4887,
+      "ssb_msybtrigger": 0.7159
+    },
+    {
+      "year": 1994,
+      "ssb": 72382.0,
+      "f": 0.946,
+      "f_fmsy": 3.378,
+      "ssb_msybtrigger": 0.7406
+    },
+    {
+      "year": 1995,
+      "ssb": 77700.0,
+      "f": 0.875,
+      "f_fmsy": 3.1245,
+      "ssb_msybtrigger": 0.795
+    },
+    {
+      "year": 1996,
+      "ssb": 92943.0,
+      "f": 0.904,
+      "f_fmsy": 3.228,
+      "ssb_msybtrigger": 0.9509
+    },
+    {
+      "year": 1997,
+      "ssb": 94962.0,
+      "f": 0.927,
+      "f_fmsy": 3.3102,
+      "ssb_msybtrigger": 0.9716
+    },
+    {
+      "year": 1998,
+      "ssb": 98574.0,
+      "f": 1.123,
+      "f_fmsy": 4.0101,
+      "ssb_msybtrigger": 1.0085
+    },
+    {
+      "year": 1999,
+      "ssb": 79182.0,
+      "f": 1.145,
+      "f_fmsy": 4.0886,
+      "ssb_msybtrigger": 0.8101
+    },
+    {
+      "year": 2000,
+      "ssb": 56004.0,
+      "f": 1.164,
+      "f_fmsy": 4.1565,
+      "ssb_msybtrigger": 0.573
+    },
+    {
+      "year": 2001,
+      "ssb": 43384.0,
+      "f": 0.868,
+      "f_fmsy": 3.0995,
+      "ssb_msybtrigger": 0.4439
+    },
+    {
+      "year": 2002,
+      "ssb": 46653.0,
+      "f": 1.062,
+      "f_fmsy": 3.7922,
+      "ssb_msybtrigger": 0.4773
+    },
+    {
+      "year": 2003,
+      "ssb": 34911.0,
+      "f": 0.752,
+      "f_fmsy": 2.6853,
+      "ssb_msybtrigger": 0.3572
+    },
+    {
+      "year": 2004,
+      "ssb": 33269.0,
+      "f": 0.801,
+      "f_fmsy": 2.8603,
+      "ssb_msybtrigger": 0.3404
+    },
+    {
+      "year": 2005,
+      "ssb": 32081.0,
+      "f": 0.82,
+      "f_fmsy": 2.9281,
+      "ssb_msybtrigger": 0.3282
+    },
+    {
+      "year": 2006,
+      "ssb": 34227.0,
+      "f": 0.73,
+      "f_fmsy": 2.6067,
+      "ssb_msybtrigger": 0.3502
+    },
+    {
+      "year": 2007,
+      "ssb": 45174.0,
+      "f": 0.666,
+      "f_fmsy": 2.3782,
+      "ssb_msybtrigger": 0.4622
+    },
+    {
+      "year": 2008,
+      "ssb": 64486.0,
+      "f": 0.642,
+      "f_fmsy": 2.2925,
+      "ssb_msybtrigger": 0.6598
+    },
+    {
+      "year": 2009,
+      "ssb": 64626.0,
+      "f": 0.625,
+      "f_fmsy": 2.2318,
+      "ssb_msybtrigger": 0.6612
+    },
+    {
+      "year": 2010,
+      "ssb": 67293.0,
+      "f": 0.524,
+      "f_fmsy": 1.8711,
+      "ssb_msybtrigger": 0.6885
+    },
+    {
+      "year": 2011,
+      "ssb": 75754.0,
+      "f": 0.404,
+      "f_fmsy": 1.4426,
+      "ssb_msybtrigger": 0.7751
+    },
+    {
+      "year": 2012,
+      "ssb": 80025.0,
+      "f": 0.372,
+      "f_fmsy": 1.3284,
+      "ssb_msybtrigger": 0.8188
+    },
+    {
+      "year": 2013,
+      "ssb": 80507.0,
+      "f": 0.368,
+      "f_fmsy": 1.3141,
+      "ssb_msybtrigger": 0.8237
+    },
+    {
+      "year": 2014,
+      "ssb": 78644.0,
+      "f": 0.374,
+      "f_fmsy": 1.3355,
+      "ssb_msybtrigger": 0.8046
+    },
+    {
+      "year": 2015,
+      "ssb": 83922.0,
+      "f": 0.38,
+      "f_fmsy": 1.3569,
+      "ssb_msybtrigger": 0.8586
+    },
+    {
+      "year": 2016,
+      "ssb": 84688.0,
+      "f": 0.376,
+      "f_fmsy": 1.3426,
+      "ssb_msybtrigger": 0.8665
+    },
+    {
+      "year": 2017,
+      "ssb": 84181.0,
+      "f": 0.421,
+      "f_fmsy": 1.5033,
+      "ssb_msybtrigger": 0.8613
+    },
+    {
+      "year": 2018,
+      "ssb": 73762.0,
+      "f": 0.535,
+      "f_fmsy": 1.9104,
+      "ssb_msybtrigger": 0.7547
+    },
+    {
+      "year": 2019,
+      "ssb": 58998.0,
+      "f": 0.49,
+      "f_fmsy": 1.7497,
+      "ssb_msybtrigger": 0.6036
+    },
+    {
+      "year": 2020,
+      "ssb": 44289.0,
+      "f": 0.361,
+      "f_fmsy": 1.2891,
+      "ssb_msybtrigger": 0.4531
+    },
+    {
+      "year": 2021,
+      "ssb": 44335.0,
+      "f": 0.247,
+      "f_fmsy": 0.882,
+      "ssb_msybtrigger": 0.4536
+    },
+    {
+      "year": 2022,
+      "ssb": 54148.0,
+      "ssb_msybtrigger": 0.554
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "cod.27.47d20": {
+    "fmsy": 0.28,
+    "msybtrigger": 97740
+  },
+  "her.27.3a47d": {
+    "fmsy": 0.3101,
+    "msybtrigger": 1232812
+  },
+  "mac.27.nea": {
+    "fmsy": 0.2601,
+    "msybtrigger": 2404353
+  },
+  "had.27.46a20": {
+    "fmsy": 0.2399,
+    "msybtrigger": 189765
+  },
+  "whb.27.1-91214": {
+    "fmsy": 0.3201,
+    "msybtrigger": 2250160
+  },
+  "ple.27.420": {
+    "fmsy": 0.1521,
+    "msybtrigger": 473906
+  },
+  "sol.27.4": {
+    "fmsy": 0.207,
+    "msybtrigger": 42827
+  },
+  "pok.27.3a46": {
+    "fmsy": 0.3629,
+    "msybtrigger": 149125
+  },
+  "cod.27.1-2": {
+    "fmsy": 0.4,
+    "fmsy_range": [
+      0.4,
+      0.6
+    ],
+    "msybtrigger": 459987
+  },
+  "her.27.1-24a514a": {
+    "fmsy": 0.157,
+    "msybtrigger": 3183319
+  },
+  "spr.27.3a4": {
+    "fmsy": null,
+    "msybtrigger": null,
+    "assessmentType": "escapement",
+    "fcap": 0.69,
+    "msybesc": 125000
+  },
+  "cap.27.1-2": {
+    "fmsy": null,
+    "msybtrigger": null,
+    "assessmentType": "ssb_only"
+  }
+}
