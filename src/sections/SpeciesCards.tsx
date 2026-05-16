@@ -307,6 +307,17 @@ export default function SpeciesCards() {
                   a major collapse in the 1990s.
                 </p>
               )}
+              {card.species === 'Arctic cod' && (
+                <p
+                  className="font-sans text-[10px] leading-relaxed mt-2"
+                  style={{ color: c.cardTextMuted, fontStyle: 'italic' }}
+                >
+                  Terminal year 2020: Arctic cod (Barents Sea) is assessed under the
+                  Norwegian-Russian Joint Fisheries Commission cycle, which operates on a
+                  different schedule than ICES Area 27 assessments. 2020 is the most recent
+                  year available in ICES SAG for this stock.
+                </p>
+              )}
             </motion.div>
           ))}
         </motion.div>

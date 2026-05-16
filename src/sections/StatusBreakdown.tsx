@@ -190,6 +190,16 @@ export default function StatusBreakdown() {
             assessments are based on full age-structured population models, while proxy assessments use
             only landing statistics as indicators.
           </p>
+          <p
+            className="font-sans text-sm max-w-lg mb-12 leading-relaxed"
+            style={{ color: c.textMuted, transition: 'color 300ms ease' }}
+          >
+            Track divergence: Atlantic mackerel and blue whiting are classified Declining under ICES
+            direct assessment (F/F<sub>MSY</sub> &gt; 1.1) but Recovering under the FAO proxy method
+            (depletion ratio ≥ 0.5, significant positive catch trend). This divergence reflects a known
+            limitation of catch-based proxies: rising catches during a period of active overfishing can
+            be misread as stock recovery. See Branch et al. (2011).
+          </p>
 
           {visible && (
             <div className="flex flex-col sm:flex-row gap-16 justify-start">
