@@ -128,8 +128,12 @@ export default function KobeTrajectory() {
   const [year, setYear]                 = useState(MAX_YEAR)
   const [hoveredStock, setHoveredStock] = useState<string | null>(null)
   const [activeStock, setActiveStock]   = useState<string | null>(null)
+  const [lockedStock, setLockedStock]   = useState<string | null>(null)
   const [mousePos, setMousePos]         = useState({ x: 0, y: 0 })
   const { isDark, colors: c } = useTheme()
+
+  // active = locked takes priority over hover
+  const highlightStock = lockedStock ?? activeStock
 
   useEffect(() => {
     const trigger = ScrollTrigger.create({
@@ -158,7 +162,7 @@ export default function KobeTrajectory() {
   const xTicks = useMemo(() => ticks(X_MAX, 8), [])
   const yTicks = useMemo(() => ticks(Y_MAX, 8), [])
 
-  // Tooltip data derived from hover + current year
+  // Tooltip data — dot hover
   const tooltipData = useMemo(() => {
     if (!hoveredStock) return null
     const track = TRACKS.find(t => t.stock === hoveredStock)
@@ -175,7 +179,7 @@ export default function KobeTrajectory() {
     }
   }, [hoveredStock, year])
 
-  // Tooltip for active (polyline-hovered) stock
+  // Tooltip data — polyline hover
   const activeTooltipData = useMemo(() => {
     if (!activeStock) return null
     const track = TRACKS.find(t => t.stock === activeStock)
@@ -192,12 +196,13 @@ export default function KobeTrajectory() {
     }
   }, [activeStock, year])
 
-  // Table: most-recent point at or before the selected year, for every track
+  // Table rows — update with slider year
   const tableRows = useMemo(() =>
     TRACKS.flatMap(track => {
       const pt = latestPoint(track, year)
       if (!pt) return []
       return [{
+        stock:   track.stock,
         species: track.species,
         color:   track.color,
         f_fmsy:  pt.f_fmsy,
@@ -213,6 +218,18 @@ export default function KobeTrajectory() {
     const rect = e.currentTarget.getBoundingClientRect()
     setMousePos({ x: e.clientX - rect.left + 14, y: e.clientY - rect.top - 8 })
   }
+
+  const handleSvgClick = (e: React.MouseEvent<SVGSVGElement>) => {
+    if ((e.target as SVGElement).tagName !== 'polyline') setLockedStock(null)
+  }
+
+  const handlePolylineClick = (stock: string, e: React.MouseEvent) => {
+    e.stopPropagation()
+    setLockedStock(prev => prev === stock ? null : stock)
+    setActiveStock(null)
+  }
+
+  const sliderPct = ((year - MIN_YEAR) / (MAX_YEAR - MIN_YEAR)) * 100
 
   return (
     <section
@@ -264,17 +281,20 @@ export default function KobeTrajectory() {
             }
           `}</style>
 
-          {/* Year display + slider */}
-          <div className="flex items-center gap-4 mb-4">
-            <span
-              className="font-mono text-4xl font-semibold tabular-nums w-20"
-              style={{ color: c.accent }}
-            >
-              {year}
-            </span>
-            {(() => {
-              const pct = ((year - MIN_YEAR) / (MAX_YEAR - MIN_YEAR)) * 100
-              return (
+          {/* Two-column layout */}
+          <div style={{ display: 'flex', gap: '32px', alignItems: 'flex-start' }}>
+
+            {/* Left 60% — slider + chart + caption */}
+            <div style={{ flex: '0 0 60%', minWidth: 0 }}>
+
+              {/* Year display + slider */}
+              <div className="flex items-center gap-4 mb-4">
+                <span
+                  className="font-mono text-4xl font-semibold tabular-nums w-20"
+                  style={{ color: c.accent }}
+                >
+                  {year}
+                </span>
                 <input
                   type="range"
                   min={MIN_YEAR}
@@ -288,390 +308,391 @@ export default function KobeTrajectory() {
                     maxWidth: '24rem',
                     height: '6px',
                     borderRadius: '3px',
-                    background: `linear-gradient(to right, #2d6a4f ${pct}%, #d4c5a9 ${pct}%)`,
+                    background: `linear-gradient(to right, #2d6a4f ${sliderPct}%, ${isDark ? '#2a3a2a' : '#d4c5a9'} ${sliderPct}%)`,
                     outline: 'none',
                     cursor: 'pointer',
                   }}
                 />
-              )
-            })()}
-            <span
-              className="font-mono text-[10px] tracking-[0.2em] uppercase"
-              style={{ color: c.textMuted }}
-            >
-              {MIN_YEAR}–{MAX_YEAR}
-            </span>
-          </div>
-
-          {/* SVG container — position:relative for tooltip overlay */}
-          <div
-            ref={containerRef}
-            className="border"
-            style={{
-              position: 'relative',
-              borderColor: c.cardBorder,
-              backgroundColor: c.cardBg,
-              padding: '16px',
-              transition: 'background-color 300ms ease, border-color 300ms ease',
-              overflowX: 'auto',
-            }}
-            onMouseMove={handleMouseMove}
-            onMouseLeave={() => { setHoveredStock(null); setActiveStock(null) }}
-          >
-            <svg
-              viewBox={`0 0 ${W} ${H}`}
-              style={{ width: '100%', height: 'auto', minWidth: '540px', display: 'block' }}
-            >
-              <defs>
-                <clipPath id="kobe-clip">
-                  <rect x={0} y={0} width={PW} height={PH} />
-                </clipPath>
-              </defs>
-
-              <g transform={`translate(${ML},${MT})`}>
-                {/* Quadrant backgrounds */}
-                <rect x={0}     y={0}         width={xS(1)}        height={yS(0)}              fill="#B33A3A" fillOpacity={0.05} />
-                <rect x={xS(1)} y={0}         width={PW - xS(1)}   height={yS(0)}              fill="#C77D2E" fillOpacity={0.05} />
-                <rect x={0}     y={yS(Y_MAX)} width={xS(1)}        height={yS(1) - yS(Y_MAX)}  fill="#D9A856" fillOpacity={0.05} />
-                <rect x={xS(1)} y={yS(Y_MAX)} width={PW - xS(1)}   height={yS(1) - yS(Y_MAX)}  fill="#4A8B6F" fillOpacity={0.05} />
-
-                {/* Arctic cod FMSY uncertainty band */}
-                <rect
-                  x={xS(0.733)} y={0}
-                  width={xS(1.100) - xS(0.733)} height={PH}
-                  fill="#6B8FAE" fillOpacity={isDark ? 0.18 : 0.12}
-                />
-
-                {/* Grid lines */}
-                {xTicks.map(v => (
-                  <line key={v} x1={xS(v)} y1={0} x2={xS(v)} y2={PH}
-                    stroke={isDark ? '#2a3a48' : '#e8e4df'} strokeWidth={1} />
-                ))}
-                {yTicks.map(v => (
-                  <line key={v} x1={0} y1={yS(v)} x2={PW} y2={yS(v)}
-                    stroke={isDark ? '#2a3a48' : '#e8e4df'} strokeWidth={1} />
-                ))}
-
-                {/* MSY reference lines */}
-                <line x1={xS(1)} y1={0} x2={xS(1)} y2={PH}
-                  stroke={isDark ? '#4a6a84' : '#9abacc'} strokeWidth={1.5} strokeDasharray="5 4" />
-                <line x1={0} y1={yS(1)} x2={PW} y2={yS(1)}
-                  stroke={isDark ? '#4a6a84' : '#9abacc'} strokeWidth={1.5} strokeDasharray="5 4" />
-
-                <g clipPath="url(#kobe-clip)">
-                  {/* Trajectory lines */}
-                  {TRACKS.map(track => {
-                    const pts = track.series
-                      .filter(r => r.year <= year)
-                      .map(r => `${xS(r.f_fmsy).toFixed(1)},${yS(r.ssb_msybtrigger).toFixed(1)}`)
-                    if (pts.length < 2) return null
-                    const isActive   = activeStock === track.stock
-                    const isDimmed   = activeStock !== null && !isActive
-                    return (
-                      <polyline
-                        key={track.stock}
-                        points={pts.join(' ')}
-                        fill="none"
-                        stroke={track.color}
-                        strokeWidth={isActive ? 2.5 : 1.5}
-                        strokeOpacity={activeStock === null ? 0.72 : isDimmed ? 0.08 : 1.0}
-                        strokeLinejoin="round"
-                        strokeLinecap="round"
-                        style={{ transition: 'stroke-opacity 120ms, stroke-width 120ms', cursor: 'pointer' }}
-                        onMouseEnter={() => setActiveStock(track.stock)}
-                      />
-                    )
-                  })}
-
-                  {/* Dots at latest visible position */}
-                  {TRACKS.map(track => {
-                    const pt = latestPoint(track, year)
-                    if (!pt) return null
-                    const isHovered  = hoveredStock === track.stock
-                    const isDimmed   = hoveredStock !== null && !isHovered
-                    const dotColor   = STATUS_COLORS[classifyPoint(pt.f_fmsy, pt.ssb_msybtrigger)]
-                    const cx = xS(pt.f_fmsy)
-                    const cy = yS(pt.ssb_msybtrigger)
-                    return (
-                      <g
-                        key={track.stock}
-                        style={{ opacity: isDimmed ? 0.15 : 1, transition: 'opacity 120ms', cursor: 'pointer' }}
-                        onMouseEnter={() => setHoveredStock(track.stock)}
-                      >
-                        <circle cx={cx} cy={cy} r={isHovered ? 9 : 7}
-                          fill={isDark ? dotColor : '#FFFFFF'}
-                          stroke={isDark ? '#1A1A18' : dotColor}
-                          strokeWidth={isDark ? 1.5 : 2}
-                        />
-                        <circle cx={cx} cy={cy} r={isHovered ? 4 : 3} fill={dotColor} />
-                      </g>
-                    )
-                  })}
-
-                  {/* Terminal year species labels — appear when terminal year is reached */}
-                  {TRACKS.map(track => {
-                    if (!track.terminal || year < track.terminal.year) return null
-                    const cx = xS(track.terminal.f_fmsy)
-                    const cy = yS(track.terminal.ssb_msybtrigger)
-                    const isHovered = hoveredStock === track.stock
-                    const isDimmed  = hoveredStock !== null && !isHovered
-                    return (
-                      <text
-                        key={track.stock + '-label'}
-                        x={cx + 6} y={cy - 6}
-                        fontSize={10}
-                        fontFamily="IBM Plex Mono"
-                        fill={track.color}
-                        opacity={isDimmed ? 0.15 : isHovered ? 1 : 0.75}
-                        style={{ transition: 'opacity 120ms', pointerEvents: 'none', userSelect: 'none' }}
-                      >
-                        {SHORT_LABEL[track.stock]}
-                      </text>
-                    )
-                  })}
-
-                  {/* Transparent wide hit areas — rendered last so they sit on top in SVG z-order */}
-                  {TRACKS.map(track => {
-                    const pts = track.series
-                      .filter(r => r.year <= year)
-                      .map(r => `${xS(r.f_fmsy).toFixed(1)},${yS(r.ssb_msybtrigger).toFixed(1)}`)
-                    if (pts.length < 2) return null
-                    return (
-                      <polyline
-                        key={track.stock + '-hit'}
-                        points={pts.join(' ')}
-                        fill="none"
-                        stroke="transparent"
-                        strokeWidth={12}
-                        style={{ cursor: 'pointer' }}
-                        onMouseEnter={() => setActiveStock(track.stock)}
-                      />
-                    )
-                  })}
-                </g>
-
-                {/* Arctic cod FMSY range label */}
-                <text
-                  x={xS(0.916)} y={PH - 6}
-                  textAnchor="middle" fontSize={8} fontFamily="IBM Plex Mono"
-                  fontStyle="italic" fill={isDark ? '#6B8FAE' : '#4a6a84'} opacity={0.85}
+                <span
+                  className="font-mono text-[10px] tracking-[0.2em] uppercase"
+                  style={{ color: c.textMuted }}
                 >
-                  FMSY 0.40–0.60
-                </text>
+                  {MIN_YEAR}–{MAX_YEAR}
+                </span>
+              </div>
 
-                {/* X axis */}
-                {xTicks.map(v => (
-                  <g key={v} transform={`translate(${xS(v)},${PH})`}>
-                    <line y2={5} stroke={isDark ? '#3a4a58' : '#c8c4be'} />
-                    <text y={18} textAnchor="middle" fontSize={10} fontFamily="IBM Plex Mono"
-                      fill={isDark ? '#6a7a88' : '#7a7a72'}>{v}</text>
-                  </g>
-                ))}
-
-                {/* Y axis */}
-                {yTicks.map(v => (
-                  <g key={v} transform={`translate(0,${yS(v)})`}>
-                    <line x2={-5} stroke={isDark ? '#3a4a58' : '#c8c4be'} />
-                    <text x={-9} textAnchor="end" dominantBaseline="middle" fontSize={10}
-                      fontFamily="IBM Plex Mono" fill={isDark ? '#6a7a88' : '#7a7a72'}>{v}</text>
-                  </g>
-                ))}
-
-                {/* Axis labels */}
-                <text x={PW / 2} y={PH + 38} textAnchor="middle" fontSize={11}
-                  fontFamily="IBM Plex Mono" fontStyle="italic" fill={isDark ? '#6a7a88' : '#7a7a72'}>
-                  F / FMSY
-                </text>
-                <text x={-(PH / 2)} y={-52} textAnchor="middle" fontSize={11}
-                  fontFamily="IBM Plex Mono" fontStyle="italic" fill={isDark ? '#6a7a88' : '#7a7a72'}
-                  transform="rotate(-90)">
-                  SSB / MSY B trigger
-                </text>
-
-                {/* Quadrant labels */}
-                <text x={xS(0.5) - 4} y={14} textAnchor="middle" fontSize={8.5}
-                  fontFamily="IBM Plex Mono" fontStyle="italic"
-                  fill={isDark ? '#8a4a4a' : '#b36060'} opacity={0.7}>Overfished</text>
-                <text x={xS(1.5) + 4} y={14} textAnchor="middle" fontSize={8.5}
-                  fontFamily="IBM Plex Mono" fontStyle="italic"
-                  fill={isDark ? '#7a8a5a' : '#7a8a5a'} opacity={0.7}>Sustainable</text>
-              </g>
-            </svg>
-
-            {/* Hover tooltip — dot/legend hover */}
-            {tooltipData && !activeTooltipData && (
+              {/* SVG container */}
               <div
+                ref={containerRef}
+                className="border"
                 style={{
-                  position: 'absolute',
-                  left: mousePos.x,
-                  top: mousePos.y,
-                  pointerEvents: 'none',
-                  zIndex: 50,
-                  minWidth: 180,
-                  backgroundColor: c.tooltipBg,
-                  border: `1px solid ${c.tooltipBorder}`,
-                  borderRadius: '4px',
-                  padding: '8px',
-                  boxShadow: isDark
-                    ? '0 2px 12px rgba(0,0,0,0.5)'
-                    : '0 2px 10px rgba(27,58,75,0.12)',
-                  fontFamily: 'IBM Plex Mono, monospace',
-                  fontSize: '12px',
+                  position: 'relative',
+                  borderColor: c.cardBorder,
+                  backgroundColor: c.cardBg,
+                  padding: '16px',
                   transition: 'background-color 300ms ease, border-color 300ms ease',
+                  overflowX: 'auto',
                 }}
+                onMouseMove={handleMouseMove}
+                onMouseLeave={() => { if (!lockedStock) { setHoveredStock(null); setActiveStock(null) } }}
               >
-                <div style={{ color: tooltipData.color, fontWeight: 600, marginBottom: '2px' }}>
-                  {tooltipData.species}
-                </div>
-                <div style={{ color: c.textMuted, fontSize: '10px', marginBottom: '6px' }}>
-                  {tooltipData.ptYear}
-                </div>
-                <StatusBadge status={tooltipData.status} size="sm" />
-                <div style={{ marginTop: '6px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', gap: '16px', marginBottom: '2px' }}>
-                    <span style={{ color: c.textMuted }}>F / FMSY</span>
-                    <span style={{ color: c.textPrimary }}>{tooltipData.f_fmsy.toFixed(3)}</span>
-                  </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', gap: '16px' }}>
-                    <span style={{ color: c.textMuted }}>SSB / Btrigger</span>
-                    <span style={{ color: c.textPrimary }}>{tooltipData.ssb.toFixed(3)}</span>
-                  </div>
-                </div>
-              </div>
-            )}
+                <svg
+                  viewBox={`0 0 ${W} ${H}`}
+                  style={{ width: '100%', height: 'auto', minWidth: '540px', display: 'block' }}
+                  onClick={handleSvgClick}
+                >
+                  <defs>
+                    <clipPath id="kobe-clip">
+                      <rect x={0} y={0} width={PW} height={PH} />
+                    </clipPath>
+                  </defs>
 
-            {/* Polyline hover tooltip — activeStock */}
-            {activeTooltipData && (
-              <div
-                style={{
-                  position: 'absolute',
-                  left: mousePos.x,
-                  top: mousePos.y,
-                  pointerEvents: 'none',
-                  zIndex: 50,
-                  minWidth: 180,
-                  backgroundColor: c.tooltipBg,
-                  border: `1px solid ${c.tooltipBorder}`,
-                  borderRadius: '4px',
-                  padding: '8px',
-                  boxShadow: isDark
-                    ? '0 2px 12px rgba(0,0,0,0.5)'
-                    : '0 2px 10px rgba(27,58,75,0.12)',
-                  fontFamily: 'IBM Plex Mono, monospace',
-                  fontSize: '12px',
-                }}
+                  <g transform={`translate(${ML},${MT})`}>
+                    {/* Quadrant backgrounds */}
+                    <rect x={0}     y={0}         width={xS(1)}        height={yS(0)}              fill="#B33A3A" fillOpacity={0.05} />
+                    <rect x={xS(1)} y={0}         width={PW - xS(1)}   height={yS(0)}              fill="#C77D2E" fillOpacity={0.05} />
+                    <rect x={0}     y={yS(Y_MAX)} width={xS(1)}        height={yS(1) - yS(Y_MAX)}  fill="#D9A856" fillOpacity={0.05} />
+                    <rect x={xS(1)} y={yS(Y_MAX)} width={PW - xS(1)}   height={yS(1) - yS(Y_MAX)}  fill="#4A8B6F" fillOpacity={0.05} />
+
+                    {/* Arctic cod FMSY uncertainty band */}
+                    <rect
+                      x={xS(0.733)} y={0}
+                      width={xS(1.100) - xS(0.733)} height={PH}
+                      fill="#6B8FAE" fillOpacity={isDark ? 0.18 : 0.12}
+                    />
+
+                    {/* Grid lines */}
+                    {xTicks.map(v => (
+                      <line key={v} x1={xS(v)} y1={0} x2={xS(v)} y2={PH}
+                        stroke={isDark ? '#2a3a48' : '#e8e4df'} strokeWidth={1} />
+                    ))}
+                    {yTicks.map(v => (
+                      <line key={v} x1={0} y1={yS(v)} x2={PW} y2={yS(v)}
+                        stroke={isDark ? '#2a3a48' : '#e8e4df'} strokeWidth={1} />
+                    ))}
+
+                    {/* MSY reference lines */}
+                    <line x1={xS(1)} y1={0} x2={xS(1)} y2={PH}
+                      stroke={isDark ? '#4a6a84' : '#9abacc'} strokeWidth={1.5} strokeDasharray="5 4" />
+                    <line x1={0} y1={yS(1)} x2={PW} y2={yS(1)}
+                      stroke={isDark ? '#4a6a84' : '#9abacc'} strokeWidth={1.5} strokeDasharray="5 4" />
+
+                    <g clipPath="url(#kobe-clip)">
+                      {/* Trajectory lines */}
+                      {TRACKS.map(track => {
+                        const pts = track.series
+                          .filter(r => r.year <= year)
+                          .map(r => `${xS(r.f_fmsy).toFixed(1)},${yS(r.ssb_msybtrigger).toFixed(1)}`)
+                        if (pts.length < 2) return null
+                        const isActive = highlightStock === track.stock
+                        const isDimmed = highlightStock !== null && !isActive
+                        return (
+                          <polyline
+                            key={track.stock}
+                            points={pts.join(' ')}
+                            fill="none"
+                            stroke={track.color}
+                            strokeWidth={isActive ? 3 : 1.5}
+                            strokeOpacity={highlightStock === null ? 0.72 : isDimmed ? 0.08 : 1.0}
+                            strokeLinejoin="round"
+                            strokeLinecap="round"
+                            style={{ transition: 'stroke-opacity 120ms, stroke-width 120ms', cursor: 'pointer' }}
+                            onMouseEnter={() => { if (!lockedStock) setActiveStock(track.stock) }}
+                            onClick={e => handlePolylineClick(track.stock, e)}
+                          />
+                        )
+                      })}
+
+                      {/* Dots at latest visible position */}
+                      {TRACKS.map(track => {
+                        const pt = latestPoint(track, year)
+                        if (!pt) return null
+                        const isHovered  = hoveredStock === track.stock
+                        const isDimmed   = highlightStock !== null && highlightStock !== track.stock
+                        const dotColor   = STATUS_COLORS[classifyPoint(pt.f_fmsy, pt.ssb_msybtrigger)]
+                        const cx = xS(pt.f_fmsy)
+                        const cy = yS(pt.ssb_msybtrigger)
+                        return (
+                          <g
+                            key={track.stock}
+                            style={{ opacity: isDimmed ? 0.15 : 1, transition: 'opacity 120ms', cursor: 'pointer' }}
+                            onMouseEnter={() => { if (!lockedStock) setHoveredStock(track.stock) }}
+                            onClick={e => handlePolylineClick(track.stock, e)}
+                          >
+                            <circle cx={cx} cy={cy} r={isHovered ? 9 : 7}
+                              fill={isDark ? dotColor : '#FFFFFF'}
+                              stroke={isDark ? '#1A1A18' : dotColor}
+                              strokeWidth={isDark ? 1.5 : 2}
+                            />
+                            <circle cx={cx} cy={cy} r={isHovered ? 4 : 3} fill={dotColor} />
+                          </g>
+                        )
+                      })}
+
+                      {/* Terminal year species labels */}
+                      {TRACKS.map(track => {
+                        if (!track.terminal || year < track.terminal.year) return null
+                        const cx = xS(track.terminal.f_fmsy)
+                        const cy = yS(track.terminal.ssb_msybtrigger)
+                        const isHovered = hoveredStock === track.stock
+                        const isDimmed  = highlightStock !== null && highlightStock !== track.stock
+                        return (
+                          <text
+                            key={track.stock + '-label'}
+                            x={cx + 6} y={cy - 6}
+                            fontSize={10}
+                            fontFamily="IBM Plex Mono"
+                            fill={track.color}
+                            opacity={isDimmed ? 0.15 : isHovered ? 1 : 0.75}
+                            style={{ transition: 'opacity 120ms', pointerEvents: 'none', userSelect: 'none' }}
+                          >
+                            {SHORT_LABEL[track.stock]}
+                          </text>
+                        )
+                      })}
+
+                      {/* Wide hit areas for polylines */}
+                      {TRACKS.map(track => {
+                        const pts = track.series
+                          .filter(r => r.year <= year)
+                          .map(r => `${xS(r.f_fmsy).toFixed(1)},${yS(r.ssb_msybtrigger).toFixed(1)}`)
+                        if (pts.length < 2) return null
+                        return (
+                          <polyline
+                            key={track.stock + '-hit'}
+                            points={pts.join(' ')}
+                            fill="none"
+                            stroke="transparent"
+                            strokeWidth={12}
+                            style={{ cursor: 'pointer' }}
+                            onMouseEnter={() => { if (!lockedStock) setActiveStock(track.stock) }}
+                            onClick={e => handlePolylineClick(track.stock, e)}
+                          />
+                        )
+                      })}
+                    </g>
+
+                    {/* Arctic cod FMSY range label */}
+                    <text
+                      x={xS(0.916)} y={PH - 6}
+                      textAnchor="middle" fontSize={8} fontFamily="IBM Plex Mono"
+                      fontStyle="italic" fill={isDark ? '#6B8FAE' : '#4a6a84'} opacity={0.85}
+                    >
+                      FMSY 0.40–0.60
+                    </text>
+
+                    {/* X axis */}
+                    {xTicks.map(v => (
+                      <g key={v} transform={`translate(${xS(v)},${PH})`}>
+                        <line y2={5} stroke={isDark ? '#3a4a58' : '#c8c4be'} />
+                        <text y={18} textAnchor="middle" fontSize={10} fontFamily="IBM Plex Mono"
+                          fill={isDark ? '#6a7a88' : '#7a7a72'}>{v}</text>
+                      </g>
+                    ))}
+
+                    {/* Y axis */}
+                    {yTicks.map(v => (
+                      <g key={v} transform={`translate(0,${yS(v)})`}>
+                        <line x2={-5} stroke={isDark ? '#3a4a58' : '#c8c4be'} />
+                        <text x={-9} textAnchor="end" dominantBaseline="middle" fontSize={10}
+                          fontFamily="IBM Plex Mono" fill={isDark ? '#6a7a88' : '#7a7a72'}>{v}</text>
+                      </g>
+                    ))}
+
+                    {/* Axis labels */}
+                    <text x={PW / 2} y={PH + 38} textAnchor="middle" fontSize={11}
+                      fontFamily="IBM Plex Mono" fontStyle="italic" fill={isDark ? '#6a7a88' : '#7a7a72'}>
+                      F / FMSY
+                    </text>
+                    <text x={-(PH / 2)} y={-52} textAnchor="middle" fontSize={11}
+                      fontFamily="IBM Plex Mono" fontStyle="italic" fill={isDark ? '#6a7a88' : '#7a7a72'}
+                      transform="rotate(-90)">
+                      SSB / MSY B trigger
+                    </text>
+
+                    {/* Quadrant labels */}
+                    <text x={xS(0.5) - 4} y={14} textAnchor="middle" fontSize={8.5}
+                      fontFamily="IBM Plex Mono" fontStyle="italic"
+                      fill={isDark ? '#8a4a4a' : '#b36060'} opacity={0.7}>Overfished</text>
+                    <text x={xS(1.5) + 4} y={14} textAnchor="middle" fontSize={8.5}
+                      fontFamily="IBM Plex Mono" fontStyle="italic"
+                      fill={isDark ? '#7a8a5a' : '#7a8a5a'} opacity={0.7}>Sustainable</text>
+                  </g>
+                </svg>
+
+                {/* Dot-hover tooltip */}
+                {tooltipData && !activeTooltipData && (
+                  <div
+                    style={{
+                      position: 'absolute',
+                      left: mousePos.x,
+                      top: mousePos.y,
+                      pointerEvents: 'none',
+                      zIndex: 50,
+                      minWidth: 180,
+                      backgroundColor: c.tooltipBg,
+                      border: `1px solid ${c.tooltipBorder}`,
+                      borderRadius: '4px',
+                      padding: '8px',
+                      boxShadow: isDark
+                        ? '0 2px 12px rgba(0,0,0,0.5)'
+                        : '0 2px 10px rgba(27,58,75,0.12)',
+                      fontFamily: 'IBM Plex Mono, monospace',
+                      fontSize: '12px',
+                      transition: 'background-color 300ms ease, border-color 300ms ease',
+                    }}
+                  >
+                    <div style={{ color: tooltipData.color, fontWeight: 600, marginBottom: '2px' }}>
+                      {tooltipData.species}
+                    </div>
+                    <div style={{ color: c.textMuted, fontSize: '10px', marginBottom: '6px' }}>
+                      {tooltipData.ptYear}
+                    </div>
+                    <StatusBadge status={tooltipData.status} size="sm" />
+                    <div style={{ marginTop: '6px' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', gap: '16px', marginBottom: '2px' }}>
+                        <span style={{ color: c.textMuted }}>F / FMSY</span>
+                        <span style={{ color: c.textPrimary }}>{tooltipData.f_fmsy.toFixed(3)}</span>
+                      </div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', gap: '16px' }}>
+                        <span style={{ color: c.textMuted }}>SSB / Btrigger</span>
+                        <span style={{ color: c.textPrimary }}>{tooltipData.ssb.toFixed(3)}</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Polyline-hover tooltip */}
+                {activeTooltipData && (
+                  <div
+                    style={{
+                      position: 'absolute',
+                      left: mousePos.x,
+                      top: mousePos.y,
+                      pointerEvents: 'none',
+                      zIndex: 50,
+                      minWidth: 180,
+                      backgroundColor: c.tooltipBg,
+                      border: `1px solid ${c.tooltipBorder}`,
+                      borderRadius: '4px',
+                      padding: '8px',
+                      boxShadow: isDark
+                        ? '0 2px 12px rgba(0,0,0,0.5)'
+                        : '0 2px 10px rgba(27,58,75,0.12)',
+                      fontFamily: 'IBM Plex Mono, monospace',
+                      fontSize: '12px',
+                    }}
+                  >
+                    <div style={{ color: activeTooltipData.color, fontWeight: 600, marginBottom: '2px' }}>
+                      {activeTooltipData.species}
+                    </div>
+                    <div style={{ color: c.textMuted, fontSize: '10px', marginBottom: '6px' }}>
+                      {activeTooltipData.ptYear}
+                      {lockedStock === activeTooltipData.species && (
+                        <span style={{ marginLeft: '6px', opacity: 0.6 }}>· locked</span>
+                      )}
+                    </div>
+                    <StatusBadge status={activeTooltipData.status} size="sm" />
+                    <div style={{ marginTop: '6px' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', gap: '16px', marginBottom: '2px' }}>
+                        <span style={{ color: c.textMuted }}>F / FMSY</span>
+                        <span style={{ color: c.textPrimary }}>{activeTooltipData.f_fmsy.toFixed(3)}</span>
+                      </div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', gap: '16px' }}>
+                        <span style={{ color: c.textMuted }}>SSB / Btrigger</span>
+                        <span style={{ color: c.textPrimary }}>{activeTooltipData.ssb.toFixed(3)}</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Description */}
+              <p
+                className="font-sans text-xs leading-relaxed mt-4 max-w-xl"
+                style={{ color: c.textMuted, transition: 'color 300ms ease' }}
               >
-                <div style={{ color: activeTooltipData.color, fontWeight: 600, marginBottom: '2px' }}>
-                  {activeTooltipData.species}
-                </div>
-                <div style={{ color: c.textMuted, fontSize: '10px', marginBottom: '6px' }}>
-                  {activeTooltipData.ptYear}
-                </div>
-                <StatusBadge status={activeTooltipData.status} size="sm" />
-                <div style={{ marginTop: '6px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', gap: '16px', marginBottom: '2px' }}>
-                    <span style={{ color: c.textMuted }}>F / FMSY</span>
-                    <span style={{ color: c.textPrimary }}>{activeTooltipData.f_fmsy.toFixed(3)}</span>
-                  </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', gap: '16px' }}>
-                    <span style={{ color: c.textMuted }}>SSB / Btrigger</span>
-                    <span style={{ color: c.textPrimary }}>{activeTooltipData.ssb.toFixed(3)}</span>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
+                Use the slider to move through time from 1988 to {MAX_YEAR}. Each row updates
+                to show that stock's F/F<sub>MSY</sub> and SSB/MSY B<sub>trigger</sub> values for the selected
+                year. Stocks with no data for earlier years will show their earliest available
+                assessment. Hover over a trajectory line to highlight a single stock and grey
+                out the rest. Click to lock. The status badge reflects classification at the
+                selected year, not the terminal year.
+              </p>
+            </div>
 
-          {/* Year data table — most-recent point ≤ selected year for every track */}
-          {tableRows.length > 0 && (
+            {/* Right 40% — sticky species table */}
             <div
-              className="mt-4 border overflow-x-auto"
               style={{
-                borderColor: c.cardBorder,
-                backgroundColor: c.cardBg,
-                transition: 'background-color 300ms ease, border-color 300ms ease',
+                flex: '0 0 calc(40% - 16px)',
+                position: 'sticky',
+                top: '88px',
+                maxHeight: 'calc(100vh - 120px)',
+                overflowY: 'auto',
               }}
             >
-              <table className="w-full font-mono text-[11px]" style={{ borderCollapse: 'collapse' }}>
-                <thead>
-                  <tr style={{ borderBottom: `1px solid ${c.cardBorder}` }}>
-                    {['Species', 'Year', 'F / FMSY', 'SSB / MSYBtrigger', 'Status'].map(h => (
-                      <th
-                        key={h}
-                        className="px-4 py-2 text-left tracking-[0.15em] uppercase"
-                        style={{ color: c.textMuted, fontWeight: 500 }}
-                      >
-                        {h}
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {tableRows.map((row, i) => (
-                    <tr
-                      key={row.species}
-                      style={{
-                        borderBottom: i < tableRows.length - 1 ? `1px solid ${c.border}` : undefined,
-                        backgroundColor: hoveredStock === TRACKS[i]?.stock
-                          ? (isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.03)')
-                          : undefined,
-                      }}
-                    >
-                      <td className="px-4 py-2">
-                        <div className="flex items-center gap-2">
-                          <span className="inline-block w-2.5 h-[2px] flex-shrink-0 rounded-full"
-                            style={{ backgroundColor: row.color }} />
-                          <span style={{ color: c.textPrimary }}>{row.species}</span>
-                        </div>
-                      </td>
-                      <td className="px-4 py-2 tabular-nums" style={{ color: c.textMuted }}>
-                        {row.ptYear}
-                      </td>
-                      <td className="px-4 py-2 tabular-nums" style={{ color: c.textPrimary }}>
-                        {row.f_fmsy.toFixed(3)}
-                      </td>
-                      <td className="px-4 py-2 tabular-nums" style={{ color: c.textPrimary }}>
-                        {row.ssb.toFixed(3)}
-                      </td>
-                      <td className="px-4 py-2">
-                        <StatusBadge status={row.status} size="sm" />
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
+              <div
+                className="font-mono text-[10px] tracking-[0.3em] uppercase mb-3"
+                style={{ color: c.textMuted }}
+              >
+                Stocks · {year}
+              </div>
 
-          {/* Legend */}
-          <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 mt-4">
-            {TRACKS.map(track => {
-              const icesStock = icesStocks.find(s => s.stock === track.stock)!
-              const status = classifyIces(icesStock)
-              return (
-                <div
-                  key={track.stock}
-                  className="flex items-center gap-2 p-2 border"
-                  style={{
-                    borderColor: c.border,
-                    transition: 'border-color 300ms ease',
-                    opacity: hoveredStock && hoveredStock !== track.stock ? 0.4 : 1,
-                  }}
-                  onMouseEnter={() => setHoveredStock(track.stock)}
-                  onMouseLeave={() => setHoveredStock(null)}
-                >
-                  <div className="w-3 h-[2px] flex-shrink-0 rounded-full"
-                    style={{ backgroundColor: track.color }} />
-                  <div className="min-w-0">
-                    <div className="font-sans text-[10px] truncate leading-tight"
-                      style={{ color: c.textPrimary }}>
-                      {track.species}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                {tableRows.map(row => {
+                  const isActive = highlightStock === row.stock
+                  const isDimmed = highlightStock !== null && !isActive
+                  return (
+                    <div
+                      key={row.stock}
+                      className="border"
+                      style={{
+                        padding: '10px 12px',
+                        borderColor: isActive ? row.color : c.cardBorder,
+                        backgroundColor: c.cardBg,
+                        opacity: isDimmed ? 0.3 : 1,
+                        transition: 'opacity 120ms, border-color 120ms, background-color 300ms ease',
+                        cursor: 'pointer',
+                      }}
+                      onClick={() => setLockedStock(prev => prev === row.stock ? null : row.stock)}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                        <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: row.color, flexShrink: 0 }} />
+                        <span
+                          className="font-sans text-xs truncate"
+                          style={{ color: c.cardText, flex: 1, minWidth: 0, transition: 'color 300ms ease' }}
+                        >
+                          {row.species}
+                        </span>
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+                        <StatusBadge status={row.status} size="sm" />
+                        <span
+                          className="font-mono text-[10px] ml-auto"
+                          style={{ color: c.cardTextMuted, transition: 'color 300ms ease' }}
+                        >
+                          F {row.f_fmsy.toFixed(2)}
+                        </span>
+                        <span
+                          className="font-mono text-[10px]"
+                          style={{ color: c.cardTextMuted, transition: 'color 300ms ease' }}
+                        >
+                          SSB {row.ssb.toFixed(2)}
+                        </span>
+                      </div>
+                      {row.ptYear < year && (
+                        <div
+                          className="font-mono text-[9px] mt-1"
+                          style={{ color: c.textMuted }}
+                        >
+                          latest: {row.ptYear}
+                        </div>
+                      )}
                     </div>
-                    <StatusBadge status={status} size="sm" />
-                  </div>
-                </div>
-              )
-            })}
+                  )
+                })}
+              </div>
+            </div>
           </div>
         </div>
       )}
