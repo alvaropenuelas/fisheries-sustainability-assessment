@@ -315,6 +315,7 @@ export default function ProxyScatter() {
               { label: 'Declining (sig. downward trend)', color: '#6B8FAE' },
               { label: 'Recovering (sig. upward trend)', color: '#2C6E4F' },
               { label: 'Stable', color: '#4A8B6F' },
+              { label: 'Data-limited (excluded from analysis)', color: '#8A8A82' },
             ].map(({ label, color }) => (
               <div
                 key={label}
