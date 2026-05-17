@@ -1,0 +1,14 @@
+display_name,asfis_code,scientific_name,fao_area,source_url,notes,data_limited
+Atlantic horse mackerel,HOM,Trachurus trachurus,27,https://www.fao.org/fishery/en/collection/asfis,,FALSE
+Atlantic redfishes,REG,Sebastes norvegicus,27,https://www.fao.org/fishery/en/collection/asfis,Aggregated with REB (S. mentella) — sum both codes for total Atlantic redfishes catch in FAO 27,TRUE
+Atlantic redfishes,REB,Sebastes mentella,27,https://www.fao.org/fishery/en/collection/asfis,Aggregated with REG (S. norvegicus) — sum both codes for total Atlantic redfishes catch in FAO 27,TRUE
+Sandeels,SAN,Ammodytes spp.,27,https://www.fao.org/fishery/en/collection/asfis,,FALSE
+European sprat,SPR,Sprattus sprattus,27,https://www.fao.org/fishery/en/collection/asfis,,FALSE
+Atlantic herring,HER,Clupea harengus,27,https://www.fao.org/fishery/en/collection/asfis,,FALSE
+Atlantic cod,COD,Gadus morhua,21,https://www.fao.org/fishery/en/collection/asfis,,FALSE
+Atlantic mackerel,MAC,Scomber scombrus,27,https://www.fao.org/fishery/en/collection/asfis,,FALSE
+Blue whiting,WHB,Micromesistius poutassou,27,https://www.fao.org/fishery/en/collection/asfis,,FALSE
+Haddock,HAD,Melanogrammus aeglefinus,27,https://www.fao.org/fishery/en/collection/asfis,,FALSE
+American plaice,PLA,Hippoglossoides platessoides,21,https://www.fao.org/fishery/en/collection/asfis,,FALSE
+Yellowtail flounder,YEL,Limanda ferruginea,21,https://www.fao.org/fishery/en/collection/asfis,,FALSE
+Atlantic wolffish,CAA,Anarhichas lupus,27,https://www.fao.org/fishery/en/collection/asfis,ASFIS code unconfirmed — R script exits with error if zero FAOSTAT rows found,FALSE

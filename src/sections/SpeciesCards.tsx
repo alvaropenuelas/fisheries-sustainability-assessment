@@ -143,6 +143,7 @@ export default function SpeciesCards() {
       trend,
       sparkline: SPARKLINES[s.stock] ?? null,
       assessmentType: s.assessmentType,
+      note: null as string | null,
     }
   })
 
@@ -163,6 +164,7 @@ export default function SpeciesCards() {
       trend,
       sparkline: null as SparkRow[] | null,
       assessmentType: undefined as string | undefined,
+      note: s.note ?? null,
     }
   })
 
@@ -297,14 +299,12 @@ export default function SpeciesCards() {
                 </span>
               </div>
 
-              {card.species === 'Atlantic cod' && card.area === 'FAO 21' && (
+              {card.note && (
                 <p
                   className="font-sans text-[10px] leading-relaxed mt-2"
                   style={{ color: c.cardTextMuted, fontStyle: 'italic' }}
                 >
-                  Depletion ratio 0.55 vs historical peak. No significant catch trend detected
-                  (τ = −0.12, p = 0.31). Stable reflects catch trend only — this stock experienced
-                  a major collapse in the 1990s.
+                  {card.note}
                 </p>
               )}
               {card.species === 'Arctic cod' && (

@@ -66,7 +66,16 @@ function ProxyTooltip({ active, payload }: { active?: boolean; payload?: Array<{
   )
 }
 
-const plotData = proxyStocks.map(s => ({
+const plotData = proxyStocks
+  .filter(s => s.flag !== 'Data-limited')
+  .map(s => ({
+    ...s,
+    status: classifyProxy(s),
+    x: s.depletion,
+    y: s.tau,
+  }))
+
+const sidebarData = proxyStocks.map(s => ({
   ...s,
   status: classifyProxy(s),
   x: s.depletion,
@@ -292,7 +301,8 @@ export default function ProxyScatter() {
               >
                 Figure 2. Proxy scatter of FAO catch-based indicators (1990–2023). Amber dashed line:
                 depletion threshold (C/C<sub>max</sub> = 0.5). Horizontal dashed line: trend neutral (τ = 0).
-                Red tint indicates depleted zone. Source: FAO FishStat 2024.
+                Red tint indicates depleted zone. Source: FAO FishStat 2024. Excluded: Atlantic redfishes
+                (pre-2000 reporting discontinuity).
               </p>
             </div>
           )}
@@ -326,7 +336,7 @@ export default function ProxyScatter() {
           >
             All proxy stocks
           </div>
-          {plotData
+          {sidebarData
             .sort((a, b) => a.depletion - b.depletion)
             .map(s => (
               <div

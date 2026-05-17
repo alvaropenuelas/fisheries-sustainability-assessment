@@ -18,6 +18,8 @@ export interface ProxyStock {
   depletion: number
   tau: number
   p: number
+  flag?: 'Data-limited'
+  note?: string
 }
 
 export type Stock = IcesStock | ProxyStock
@@ -39,20 +41,7 @@ export const icesStocks: IcesStock[] = [
   { track: 'ices', species: 'Norwegian spring herring', stock: 'her.27.1-24a514a', area: 'NE Atlantic', f_fmsy: 1.159, ssb_msybtrigger: 1.151 },
 ]
 
-export const proxyStocks: ProxyStock[] = [
-  { track: 'proxy', species: 'Atlantic horse mackerel', area: 'FAO 27', depletion: 0.04, tau: -0.79, p: 0.0001 },
-  { track: 'proxy', species: 'Atlantic redfishes',      area: 'FAO 27', depletion: 0.10, tau: -0.83, p: 0.0001 },
-  { track: 'proxy', species: 'Sandeels',                area: 'FAO 27', depletion: 0.08, tau: -0.58, p: 0.002  },
-  { track: 'proxy', species: 'European sprat',          area: 'FAO 27', depletion: 0.47, tau: -0.28, p: 0.043  },
-  { track: 'proxy', species: 'Atlantic herring',        area: 'FAO 27', depletion: 0.52, tau: -0.28, p: 0.051  },
-  { track: 'proxy', species: 'Atlantic cod',            area: 'FAO 21', depletion: 0.55, tau: -0.12, p: 0.31   },
-  { track: 'proxy', species: 'Atlantic mackerel',       area: 'FAO 27', depletion: 0.65, tau:  0.45, p: 0.0008 },
-  { track: 'proxy', species: 'Blue whiting',            area: 'FAO 27', depletion: 0.76, tau:  0.28, p: 0.038  },
-  { track: 'proxy', species: 'Haddock',                 area: 'FAO 27', depletion: 0.71, tau:  0.31, p: 0.028  },
-  { track: 'proxy', species: 'American plaice',         area: 'FAO 21', depletion: 0.08, tau: -0.71, p: 0.0001 },
-  { track: 'proxy', species: 'Yellowtail flounder',     area: 'FAO 21', depletion: 0.13, tau: -0.62, p: 0.0004 },
-  { track: 'proxy', species: 'Atlantic wolffish',       area: 'FAO 27', depletion: 0.27, tau: -0.44, p: 0.009  },
-]
+export { proxyStocks } from './proxyStocksGenerated'
 
 export function classifyIces(s: IcesStock): Status {
   if (s.assessmentType === 'escapement') return 'Data-limited'
@@ -71,6 +60,7 @@ export function classifyIces(s: IcesStock): Status {
 }
 
 export function classifyProxy(s: ProxyStock): Status {
+  if (s.flag === 'Data-limited') return 'Data-limited'
   const { depletion, tau, p } = s
   if (depletion < 0.25) return 'Collapsed'
   if (depletion < 0.50 && p < 0.05 && tau < 0) return 'Overexploited'

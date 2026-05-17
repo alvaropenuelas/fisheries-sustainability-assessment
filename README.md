@@ -28,6 +28,49 @@ Applied to stocks outside ICES scope or lacking formal assessments. Two indicato
 1. **Depletion ratio** (C/C<sub>max</sub>): ratio of the most recent three-year mean catch to the historical maximum three-year mean catch. Used as a relative biomass proxy following Kleisner & Pauly [4] and Martell & Froese [5].
 2. **Mann-Kendall τ** [8, 9]: non-parametric trend statistic applied to the 1990–2023 subseries. Detects monotonic increase or decrease; p < 0.05 indicates a significant trend.
 
+### FAO Proxy Pipeline
+
+**Data source:** `fishstat` R package v2026.1.0.0 (Magnusson & Sharma; FAO copyright), which bundles FAO Global Capture Production data 1950–2024. No external download required. Species identified by ASFIS 3-alpha code; area by FAO major fishing area code.
+
+**Species × FAO major area definitions:**
+
+| Stock | Scientific name | ASFIS code(s) | FAO area |
+|---|---|---|---|
+| Atlantic horse mackerel | *Trachurus trachurus* | HOM | 27 |
+| Atlantic redfishes | *Sebastes marinus* + *S. mentella* | REG + REB | 27 |
+| Sandeels | *Ammodytes* spp. | SAN | 27 |
+| European sprat | *Sprattus sprattus* | SPR | 27 |
+| Atlantic herring | *Clupea harengus* | HER | 27 |
+| Atlantic cod | *Gadus morhua* | COD | 21 |
+| Atlantic mackerel | *Scomber scombrus* | MAC | 27 |
+| Blue whiting | *Micromesistius poutassou* | WHB | 27 |
+| Haddock | *Melanogrammus aeglefinus* | HAD | 27 |
+| American plaice | *Hippoglossoides platessoides* | PLA | 21 |
+| Yellowtail flounder | *Limanda ferruginea* | YEL | 21 |
+| Atlantic wolffish | *Anarhichas lupus* | CAA | 27 |
+
+Atlantic redfishes catches are summed across both codes before computing any indicator.
+
+**Depletion formula:** Let S[t] = trailing 3-year moving average of annual catch (tonnes live weight). Then:
+
+> D = mean(S[T−2], S[T−1], S[T]) / max(S)
+
+where T is the last available year and max(S) is computed over the full 1950–present series.
+
+**Trend formula:** Mann-Kendall τ and two-sided p computed on S[t] restricted to 1990–2023, using `Kendall::MannKendall()` in R (Kendall package). Stocks with fewer than 20 data years are flagged Data-limited and excluded from trend analysis.
+
+**Re-run the pipeline:**
+
+```bash
+# requires R ≥ 4.0 with packages: dplyr, tidyr, readr, Kendall, fishstat
+npm run fetch-fao
+
+# requires Node ≥ 18 (uses npx tsx — no global install needed)
+npm run generate-proxy
+```
+
+`fetch-fao` loads data from the `fishstat` package, filters to the 12 stocks, and writes `data/processed/fao_proxy_metrics.csv`. `generate-proxy` reads that CSV and overwrites `src/data/proxyStocksGenerated.ts`. Neither script is wired into the build step; the app ships with the last committed generated file.
+
 ---
 
 ## Status Classification
@@ -112,8 +155,6 @@ Values were manually transcribed at time of writing (May 2026). Verify against p
 **Mann-Kendall detects only monotonic trends.** Non-linear stock trajectories — collapse followed by partial recovery, or recovery interrupted by a new decline — may be misclassified. A stock with a U-shaped catch series over 1990–2023 could return τ ≈ 0 and be classified Stable despite having collapsed and partially rebuilt.
 
 **ICES assessments are authoritative.** Where both tracks cover the same species (cod, herring, mackerel, haddock, blue whiting, sprat), the ICES direct assessment supersedes the proxy estimate. The proxy track is applied only where ICES data are unavailable.
-
-**Atlantic cod (FAO 21) caveat.** The proxy method classifies Newfoundland cod as Stable (depletion = 0.55, τ = −0.12, p = 0.31). The non-significant trend and depletion ratio above 0.5 technically meet the Stable criteria, but a depletion ratio of 0.55 represents a stock at roughly half its historical peak catch — far from recovered. This stock should not be interpreted as healthy.
 
 ---
 

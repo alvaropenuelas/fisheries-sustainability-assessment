@@ -1,0 +1,13 @@
+species_name,species_code,fao_area,year_start,year_end,smoothing_window,recent_window,cmax,depletion,tau,p,n_years,flag
+Atlantic horse mackerel,HOM,FAO 27,1950,2024,3,3,372290,0.175,-0.807,0,75,
+Atlantic redfishes,REG+REB,FAO 27,1950,2024,3,3,153569,0.902,0.483,1e-4,75,
+Sandeels,SAN,FAO 27,1950,2024,3,3,1078093,0.19,-0.601,0,75,
+European sprat,SPR,FAO 27,1950,2024,3,3,842549,0.453,-0.187,0.1231,75,
+Atlantic herring,HER,FAO 27,1950,2024,3,3,3568733,0.419,-0.084,0.4953,75,
+Atlantic cod,COD,FAO 21,1950,2024,3,3,1681825,0.024,-0.287,0.0177,75,
+Atlantic mackerel,MAC,FAO 27,1950,2024,3,3,1225095,0.848,0.408,7e-4,75,
+Blue whiting,WHB,FAO 27,1950,2024,3,3,2284015,0.593,0.251,0.0379,75,
+Haddock,HAD,FAO 27,1950,2024,3,3,738200,0.41,0.373,0.002,75,
+American plaice,PLA,FAO 21,1950,2024,3,3,122947,0.013,-0.9,0,75,
+Yellowtail flounder,YEL,FAO 21,1950,2024,3,3,72184,0.135,-0.155,0.2023,75,
+Atlantic wolffish,CAA,FAO 27,1950,2024,3,3,29100,0.441,-0.469,1e-4,75,

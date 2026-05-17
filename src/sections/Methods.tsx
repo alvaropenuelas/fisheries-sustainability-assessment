@@ -67,6 +67,15 @@ Classification followed the ICES precautionary approach framework. Stocks with S
 Temporal trend was quantified using the Mann-Kendall (1945) non-parametric test applied to the 1990–2023 subseries. The statistic τ (Kendall's tau, –1 to +1) measures monotonic trend direction and strength; p-values below 0.05 indicate a significant trend. This approach is consistent with FAO (2022) methods for data-limited stock evaluation.`,
   },
   {
+    track: 'FAO Proxy Pipeline',
+    color: '#1B3A4B',
+    body: `Species are identified by ASFIS 3-alpha code and FAO major fishing area. Atlantic redfishes are aggregated from Sebastes marinus (REG) and S. mentella (REB) before computing any indicator. All other stocks use a single code.
+
+Depletion: D = mean(S[T−2], S[T−1], S[T]) / max(S), where S[t] is the trailing 3-year moving average of annual catch in tonnes live weight and the denominator spans the full 1950–present series. Trend: Mann-Kendall τ and two-sided p computed on S[t] restricted to 1990–2023 using Kendall::MannKendall() in R.
+
+Pipeline scripts: npm run fetch-fao (loads data from the fishstat R package — no external download; requires R ≥ 4.0 with dplyr/tidyr/readr/Kendall/fishstat) and npm run generate-proxy (generates src/data/proxyStocksGenerated.ts, requires Node ≥ 18). Neither is wired into the build step; the app ships with the last committed generated file.`,
+  },
+  {
     track: 'Important Limitations',
     color: '#C77D2E',
     body: '',
