@@ -9,7 +9,7 @@ Dual-track sustainability assessment of 24 commercial fish stocks across ICES Ar
 
 ## Research Question
 
-What is the current sustainability status of commercially exploited North Atlantic fish stocks, and to what extent do ICES formal assessments and catch-based proxy methods agree in their classifications?
+North Atlantic commercial fish stocks are assessed under two independent frameworks: ICES formal stock assessments and FAO catch-based proxy indicators. This project asks whether both methods agree on which stocks are in trouble.
 
 ---
 
@@ -92,12 +92,6 @@ npm install
 npm run dev
 ```
 
-Open `http://localhost:5173/fisheries-sustainability-assessment/`
-
-```bash
-npm run build   # production build → dist/
-```
-
 ---
 
 ## Data Sources & Licensing
@@ -141,7 +135,7 @@ Values were manually transcribed at time of writing (May 2026). Verify against p
 
 ## Author
 
-Álvaro Peñuelas Sánchez — MSc Marine & Lacustrine Science and Management, VUB/UGhent/UAntwerp, Cum Laude 2025. This project demonstrates application of the ICES precautionary reference point framework, catch-based stock status indicators (depletion ratio, Mann-Kendall trend analysis), and interactive scientific data visualisation in React/TypeScript. Marine ecologist specialising in quantitative methods, species distribution modelling, and fisheries data analysis.
+Álvaro Peñuelas Sánchez
 
 [github.com/alvaropenuelas](https://github.com/alvaropenuelas)
 
