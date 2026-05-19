@@ -43,30 +43,41 @@ export const icesStocks: IcesStock[] = [
 
 export { proxyStocks } from './proxyStocksGenerated'
 
+// These 6 categories are a custom visualization overlay, not an official ICES taxonomy.
+// ICES uses the precautionary approach framework directly. See ICES CM 2004/ACFM:22.
 export function classifyIces(s: IcesStock): Status {
   if (s.assessmentType === 'escapement') return 'Data-limited'
   if (s.assessmentType === 'ssb_only') {
-    if (s.ssb_msybtrigger < 0.5) return 'Collapsed'
-    if (s.ssb_msybtrigger < 1.0) return 'Depleted'
+    if (s.ssb_msybtrigger < 0.5) return 'Collapsed'   // SSB well below precautionary zone
+    if (s.ssb_msybtrigger < 1.0) return 'Depleted'    // SSB between Blim and Btrigger
     return 'Stable'
   }
   const { f_fmsy: f, ssb_msybtrigger: ssb } = s
-  if (ssb < 0.5 && f > 1.5) return 'Collapsed'
-  if (ssb < 0.8 && f > 1.2) return 'Overexploited'
-  if (ssb < 0.8) return 'Depleted'
-  if (f > 1.1) return 'Declining'
-  if (ssb > 1.2 && f < 0.9) return 'Recovering'
+  if (ssb < 0.5 && f > 1.5) return 'Collapsed'        // below Blim proxy and heavily overfished
+  if (ssb < 0.8 && f > 1.2) return 'Overexploited'    // in danger zone with excess fishing mortality
+  if (ssb < 0.8) return 'Depleted'                    // below MSY Btrigger regardless of F
+  if (f > 1.1) return 'Declining'                     // overfishing with biomass not yet depleted
+  if (ssb > 1.2 && f < 0.9) return 'Recovering'       // biomass building under reduced mortality
   return 'Stable'
 }
 
 export function classifyProxy(s: ProxyStock): Status {
   if (s.flag === 'Data-limited') return 'Data-limited'
   const { depletion, tau, p } = s
-  if (depletion < 0.25) return 'Collapsed'
-  if (depletion < 0.50 && p < 0.05 && tau < 0) return 'Overexploited'
+  // Collapsed: C/Cmax < 0.10. Threshold from Kleisner & Pauly (2011) SSplots methodology;
+  // 10% of peak catch indicates severe historical depletion.
+  if (depletion < 0.10) return 'Collapsed'
+  // Overexploited: moderate depletion band with a significant declining trend.
+  // Depletion < 0.50 follows Martell & Froese (2013) 50% rule; trend significance per
+  // Mann-Kendall p < 0.05 (Branch et al. 2011 two-indicator approach).
+  if (depletion < 0.50 && tau < 0 && p < 0.05) return 'Overexploited'
+  // Depleted: catch-all for the 0.10–0.50 band when trend is non-significant or positive.
   if (depletion < 0.50) return 'Depleted'
-  if (depletion >= 0.50 && tau < -0.2 && p < 0.05) return 'Declining'
-  if (depletion >= 0.50 && tau > 0.2 && p < 0.05) return 'Recovering'
+  // Declining: above 50% of peak but with a strong significant downward trend.
+  // |τ| > 0.20 threshold follows Carruthers et al. (2012) sensitivity analysis.
+  if (tau < -0.20 && p < 0.05) return 'Declining'
+  // Recovering: above 50% of peak with a strong significant upward trend.
+  if (tau > 0.20 && p < 0.05) return 'Recovering'
   return 'Stable'
 }
 

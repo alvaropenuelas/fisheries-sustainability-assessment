@@ -89,26 +89,74 @@ npm run generate-proxy
 
 ### Proxy Track (applied in order — first match wins)
 
+Collapsed threshold (C/C<sub>max</sub> < 0.10) follows Kleisner & Pauly (2011) SSplots stock-status methodology. The 0.50 band boundary derives from Martell & Froese (2013). The |τ| > 0.20 cutoff for Declining/Recovering is grounded in Carruthers et al. (2012) sensitivity analysis.
+
 | Status | Depletion ratio | τ | p |
 |---|---|---|---|
-| Collapsed | < 0.25 | — | — |
-| Overexploited | < 0.50 | < 0 | < 0.05 |
-| Depleted | < 0.50 | any | any |
-| Declining | ≥ 0.50 | < −0.2 | < 0.05 |
-| Recovering | ≥ 0.50 | > 0.2 | < 0.05 |
+| Collapsed | < 0.10 | — | — |
+| Overexploited | 0.10 – 0.50 | < 0 | < 0.05 |
+| Depleted | 0.10 – 0.50 | any | any |
+| Declining | ≥ 0.50 | < −0.20 | < 0.05 |
+| Recovering | ≥ 0.50 | > 0.20 | < 0.05 |
 | Stable | all other | — | — |
+
+### Threshold sensitivity
+
+Proxy thresholds follow the SSplots/Sea Around Us classification logic (Kleisner & Pauly 2011) and the two-indicator framework of Branch et al. (2011), with the |τ| > 0.20 boundary grounded in Carruthers et al. (2012). ICES thresholds are anchored to F<sub>MSY</sub> and MSY B<sub>trigger</sub> reference points per ICES CM 2004/ACFM:22.
+
+To test threshold robustness, all 24 stocks were classified under three proxy/ICES threshold sets: baseline (as above), stricter (all thresholds ×0.8), and looser (all thresholds ×1.2). A stock is "robust" if it never flips between stressed (Collapsed/Overexploited/Depleted/Declining) and not-stressed across all three sets. Script: `scripts/threshold_sensitivity.ts`.
+
+**13 of 22 assessable stocks are robust** (2 Data-limited excluded). The 9 sensitive stocks are borderline cases: European sprat, Atlantic herring, Haddock, and Blue whiting in the proxy track, and Atlantic mackerel, Common sole, Saithe, Arctic cod, and Norwegian spring herring in the ICES track. Core findings — severe depletion of Atlantic cod (FAO 21), American plaice, and persistent overfishing of Blue whiting — are threshold-invariant. Among proxy stocks, European sprat, Atlantic herring, and Common sole are the three most threshold-sensitive: all are quota-managed North Sea stocks where catch trends are a poor biomass proxy, consistent with Branch et al. (2011).
 
 ---
 
 ## Key Findings
 
-- **6 of 10 assessable ICES stocks** (60%) are below MSY B<sub>trigger</sub> or subject to overfishing (sprat and capelin excluded — no F/F<sub>MSY</sub> reference point)
+- **6 of 10 assessable ICES stocks** (60%) have SSB/MSY B<sub>trigger</sub> < 1 or F/F<sub>MSY</sub> > 1 (sprat and capelin excluded — no applicable F/F<sub>MSY</sub> reference point)
 - **North Sea cod** (cod.27.47d20): F/F<sub>MSY</sub> = 0.882, SSB/MSY B<sub>trigger</sub> = 0.554 — classified Depleted; biomass remains below MSY B<sub>trigger</sub> despite fishing mortality below F<sub>MSY</sub>
 - **European plaice** (ple.27.420): SSB/MSY B<sub>trigger</sub> = 1.885 — the only stock well above its biomass trigger, classified Recovering
-- **7 of 12 proxy stocks** are Collapsed or Overexploited, including Atlantic horse mackerel (D = 0.04, τ = −0.79), Atlantic redfishes (D = 0.10, τ = −0.83), and American plaice (D = 0.08, τ = −0.71)
-- **3 proxy stocks** show significant positive trends: Atlantic mackerel (τ = 0.45, p < 0.001), Haddock (τ = 0.31, p = 0.028), Blue whiting (τ = 0.28, p = 0.038)
-- Both tracks agree on direction for overlapping species (cod, herring, mackerel, haddock, blue whiting, sprat) in 5 of 6 cases
-- **Atlantic mackerel and blue whiting diverge between tracks**: Declining under ICES assessment (F/F<sub>MSY</sub> > 1.1) but Recovering under FAO proxy — consistent with the catch-based proxy bias documented in Branch et al. (2011)
+- **5 of 11 assessable proxy stocks** are Collapsed or Overexploited (FAO pipeline, new threshold C/C<sub>max</sub> < 0.10 for Collapsed per Kleisner & Pauly 2011): Atlantic cod FAO 21 (D = 0.024, τ = −0.287), American plaice (D = 0.013, τ = −0.900), Atlantic horse mackerel (D = 0.175, τ = −0.807), Sandeels (D = 0.190, τ = −0.601), Atlantic wolffish (D = 0.441, τ = −0.469)
+- **4 additional proxy stocks** (European sprat, Atlantic herring, Haddock, Yellowtail flounder) are Depleted (D = 0.10–0.50); Haddock has a significant positive trend (τ = +0.373, p = 0.002) but depletion ratio is below 0.50 — consistent with catch-based proxy bias documented in Branch et al. (2011)
+- **2 proxy stocks** show strong recovery signals: Atlantic mackerel (D = 0.848, τ = +0.408, p < 0.001) and Blue whiting (D = 0.593, τ = +0.251, p = 0.038)
+- Atlantic redfishes (FAO 27) are flagged Data-limited: a pre-2000 reporting discontinuity in REG+REB catches makes the depletion ratio uninterpretable
+- **ICES formal assessments and FAO catch-based proxies show zero directional agreement** across all four valid geographic pairs (n=4: NS herring, mackerel, haddock, blue whiting; cod excluded — geographic mismatch FAO 21 vs Area 27; sprat excluded — ICES Data-limited). Spearman ρ between proxy depletion and ICES SSB/MSY B<sub>trigger</sub> = 0.00 (n=4). This empirically confirms catch-only proxy limitations for actively quota-managed stocks described in Branch et al. (2011) and Carruthers et al. (2012). Full analysis: see Method comparison section and `scripts/method_concordance.ts`.
+
+---
+
+## Method comparison (ICES vs proxy)
+
+Six species overlap between the two tracks. Statistics are computed for four geographically comparable pairs. Atlantic cod is listed but excluded from statistics: ICES covers Area 27 (NE Atlantic) while the proxy covers FAO 21 (NW Atlantic / Grand Banks) — different ocean basin and population. Atlantic herring uses North Sea stock only (her.27.3a47d); Norwegian spring herring (her.27.1-24a514a, ICES Declining) excluded — opposite classification and distinct management unit. European sprat excluded — ICES Data-limited (escapement-managed). Script: `scripts/method_concordance.ts`.
+
+| Species | ICES category | Proxy category | ICES str | Proxy str | Geo match | In stats |
+|---|---|---|---|---|---|---|
+| Atlantic cod | Depleted¹ | Collapsed | S | S | NO | — |
+| Atlantic herring | Recovering² | Depleted | N | S | PARTIAL | YES |
+| Atlantic mackerel | Declining | Recovering | S | N | YES | YES |
+| Haddock | Recovering | Depleted | N | S | YES | YES |
+| Blue whiting | Declining | Recovering | S | N | YES | YES |
+| European sprat | Data-limited³ | Depleted | — | S | YES | — |
+
+¹ North Sea cod only (cod.27.47d20). Aggregating with NE Arctic cod (cod.27.1-2) was misleading — Barents Sea stock has different population dynamics and its higher SSB dominates the weighted average, masking North Sea depletion.  
+² North Sea herring only (her.27.3a47d). Norwegian spring herring (her.27.1-24a514a) excluded — ICES classifies it as Declining, the opposite of North Sea herring (Recovering).  
+³ ICES classifies European sprat as Data-limited (escapement-managed; no F/F<sub>MSY</sub> reference point).
+
+**Valid pairs (n=4):** NS herring, Atlantic mackerel, Haddock, Blue whiting
+
+| Metric | Result |
+|---|---|
+| Exact category agreement | 0/4 |
+| Directional agreement (stressed vs not-stressed) | 0/4 |
+| Spearman ρ (proxy depletion vs ICES SSB/MSY B<sub>trigger</sub>) | 0.00 |
+
+n=4 is too small for statistical inference. This is a descriptive finding, not a hypothesis test.
+
+The systematic disagreement is consistent with theoretical predictions for catch-based stock status methods applied to quota-managed fisheries (Branch et al. 2011; Carruthers et al. 2012). The pattern runs in opposite directions for different failure modes:
+
+- **Atlantic mackerel and blue whiting**: rising catches during active fishing pressure (depletion ratios 0.85 and 0.59, positive Mann-Kendall trends) interpreted as recovery by the proxy → Recovering. ICES F/F<sub>MSY</sub> = 1.17 and 1.61 confirm overfishing → both Declining. The proxy cannot distinguish biomass rebuilding from quota-driven catch increases.
+- **Haddock**: post-2013 catch reduction (likely TAC-driven, ~30% drop) interpreted as biomass depletion by the proxy → Depleted. ICES SSB/MSY B<sub>trigger</sub> = 2.79 shows the stock is well above its biomass trigger → Recovering. The proxy misclassifies stocks whose catches decline because of management, not population collapse.
+- **North Sea herring**: stable recent catches at ~42% of historical peak read as depleted by the proxy → Depleted. ICES SSB/MSY B<sub>trigger</sub> = 1.20 confirms the stock is above its biomass trigger → Recovering. Flat catch at quota reflects managed restraint, not low abundance.
+
+Cod excluded from statistics (geographic mismatch). Sprat excluded (Data-limited). See Methods section for full pair definitions.
 
 ---
 

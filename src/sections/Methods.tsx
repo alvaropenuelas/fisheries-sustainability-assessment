@@ -49,6 +49,7 @@ interface MethodBlock {
   color: string
   body: string
   items?: string[]
+  tableData?: { columns: string[]; rows: string[][] }
 }
 
 const methodBlocks: MethodBlock[] = [
@@ -62,9 +63,9 @@ Classification followed the ICES precautionary approach framework. Stocks with S
   {
     track: 'FAO Catch-Based Proxy Track',
     color: '#2C6E4F',
-    body: `For stocks lacking ICES assessments, FAO FishStat annual catch series (1950–2023) were used to derive two proxy indicators. The depletion ratio (C/C_max) is computed as the ratio of the most recent three-year mean catch to the historical maximum three-year mean catch. Values below 0.5 indicate that current removals are less than half of the peak exploitation level.
+    body: `For stocks lacking ICES assessments, FAO FishStat annual catch series (1950–2023) were used to derive two proxy indicators. The depletion ratio (C/C_max) is computed as the ratio of the most recent three-year mean catch to the historical maximum three-year mean catch. Values below 0.50 indicate that current removals are less than half of the peak exploitation level; values below 0.10 are classified Collapsed following Kleisner & Pauly (2011) SSplots methodology.
 
-Temporal trend was quantified using the Mann-Kendall (1945) non-parametric test applied to the 1990–2023 subseries. The statistic τ (Kendall's tau, –1 to +1) measures monotonic trend direction and strength; p-values below 0.05 indicate a significant trend. This approach is consistent with FAO (2022) methods for data-limited stock evaluation.`,
+Temporal trend was quantified using the Mann-Kendall (1945) non-parametric test applied to the 1990–2023 subseries. The statistic τ (Kendall's tau, –1 to +1) measures monotonic trend direction and strength; |τ| > 0.20 with p < 0.05 is required for Declining or Recovering classification following Carruthers et al. (2012). A threshold sensitivity analysis (±20% on all proxy and ICES reference point values) confirms 13 of 22 assessable stocks are robust to threshold variation; results are in scripts/threshold_sensitivity.ts.`,
   },
   {
     track: 'FAO Proxy Pipeline',
@@ -74,6 +75,26 @@ Temporal trend was quantified using the Mann-Kendall (1945) non-parametric test 
 Depletion: D = mean(S[T−2], S[T−1], S[T]) / max(S), where S[t] is the trailing 3-year moving average of annual catch in tonnes live weight and the denominator spans the full 1950–present series. Trend: Mann-Kendall τ and two-sided p computed on S[t] restricted to 1990–2023 using Kendall::MannKendall() in R.
 
 Pipeline scripts: npm run fetch-fao (loads data from the fishstat R package — no external download; requires R ≥ 4.0 with dplyr/tidyr/readr/Kendall/fishstat) and npm run generate-proxy (generates src/data/proxyStocksGenerated.ts, requires Node ≥ 18). Neither is wired into the build step; the app ships with the last committed generated file.`,
+  },
+  {
+    track: 'Method Concordance (ICES vs Proxy, n=4)',
+    color: '#6B8FAE',
+    body: `Six species overlap between tracks. Atlantic cod excluded from statistics (geographic mismatch: ICES Area 27 vs FAO 21 / NW Atlantic). Atlantic herring uses North Sea stock only (her.27.3a47d); Norwegian spring herring excluded — opposite ICES classification and distinct management unit. European sprat excluded — ICES Data-limited (escapement-managed). Agreement computed over n=4: NS herring, mackerel, haddock, blue whiting.
+
+Exact category agreement: 0/4. Directional agreement (stressed vs not-stressed): 0/4. Spearman ρ = 0.00, n=4. n=4 is too small for statistical inference — this is a descriptive finding, not a hypothesis test. The systematic disagreement is consistent with theoretical predictions for catch-based methods applied to quota-managed fisheries (Branch et al. 2011; Carruthers et al. 2012).
+
+The proxy track is applied only to stocks without ICES assessments — for those stocks, catch-based indicators are the only available data. Results should be interpreted with explicit awareness of the directional bias shown above: downward catch trends may reflect quota cuts rather than depletion, and upward trends may reflect effort increases rather than biomass recovery.`,
+    tableData: {
+      columns: ['Species', 'ICES cat', 'Proxy cat', 'ICES str', 'Prx str', 'Geo'],
+      rows: [
+        ['Atlantic cod', 'Depleted [NS]', 'Collapsed', 'S', 'S', 'NO — excl.'],
+        ['Atlantic herring', 'Recovering [NS]', 'Depleted', 'N', 'S', 'PARTIAL'],
+        ['Atlantic mackerel', 'Declining', 'Recovering', 'S', 'N', 'YES'],
+        ['Haddock', 'Recovering', 'Depleted', 'N', 'S', 'YES'],
+        ['Blue whiting', 'Declining', 'Recovering', 'S', 'N', 'YES'],
+        ['European sprat', 'Data-limited', 'Depleted', '—', 'S', 'YES — excl.'],
+      ],
+    },
   },
   {
     track: 'Important Limitations',
@@ -170,6 +191,40 @@ export default function Methods() {
                       {block.body.split('\n\n').map((para, i) => (
                         <p key={i}>{para}</p>
                       ))}
+                      {block.tableData && (
+                        <div className="overflow-x-auto mt-4">
+                          <table className="w-full text-xs font-mono border-collapse">
+                            <thead>
+                              <tr>
+                                {block.tableData.columns.map((col, i) => (
+                                  <th
+                                    key={i}
+                                    className="text-left pb-2 pr-4 font-semibold"
+                                    style={{ color: c.accent, borderBottom: `1px solid ${c.border}` }}
+                                  >
+                                    {col}
+                                  </th>
+                                ))}
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {block.tableData.rows.map((row, ri) => (
+                                <tr key={ri}>
+                                  {row.map((cell, ci) => (
+                                    <td
+                                      key={ci}
+                                      className="py-1 pr-4"
+                                      style={{ color: c.textMuted, borderBottom: `1px solid ${c.border}40` }}
+                                    >
+                                      {cell}
+                                    </td>
+                                  ))}
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
