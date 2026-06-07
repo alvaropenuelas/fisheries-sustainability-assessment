@@ -17,7 +17,7 @@ North Atlantic commercial fish stocks are assessed under two independent framewo
 
 ### Track 1 — ICES Direct Assessment (N=12, Area 27)
 
-Uses F/F<sub>MSY</sub> and SSB/MSY B<sub>trigger</sub> from the ICES Stock Assessment Graph (SAG) database (2023 assessments). These are model-derived indices of fishing mortality relative to the maximum sustainable yield proxy and spawning stock biomass relative to the precautionary biomass trigger, respectively. Classification follows the ICES two-dimensional precautionary approach framework [10].
+Uses F/F<sub>MSY</sub> and SSB/MSY B<sub>trigger</sub> from the ICES Stock Assessment Graph (SAG) database (2025 assessments; two stocks use SAG 2023 fallback values — see Limitations). These are model-derived indices of fishing mortality relative to the maximum sustainable yield proxy and spawning stock biomass relative to the precautionary biomass trigger, respectively. Classification follows the ICES two-dimensional precautionary approach framework [10].
 
 Visualised as a Kobe plot: F/F<sub>MSY</sub> on the x-axis, SSB/MSY B<sub>trigger</sub> on the y-axis, with reference lines at 1.0 on both axes defining the four management quadrants.
 
@@ -100,6 +100,10 @@ Collapsed threshold (C/C<sub>max</sub> < 0.10) follows Kleisner & Pauly (2011) S
 | Recovering | ≥ 0.50 | > 0.20 | < 0.05 |
 | Stable | all other | — | — |
 
+### Note on the "Declining" label
+
+The same label has different meanings across the two tracks. In the ICES track, "Declining" indicates fishing pressure above F<sub>MSY</sub> (F/F<sub>MSY</sub> > 1.1) regardless of current biomass — e.g. North Sea herring (F/F<sub>MSY</sub>=1.26, SSB/B<sub>trigger</sub>=1.38) is Declining because pressure is too high, even though biomass is well above the trigger. In the proxy track, "Declining" means a statistically significant downward trend in catches (Mann-Kendall τ < −0.20, p < 0.05). The same label reflects pressure in one track and trend in the other; this is a limitation of the 6-category scheme.
+
 ### Threshold sensitivity
 
 Proxy thresholds follow the SSplots/Sea Around Us classification logic (Kleisner & Pauly 2011) and the two-indicator framework of Branch et al. (2011), with the |τ| > 0.20 boundary grounded in Carruthers et al. (2012). ICES thresholds are anchored to F<sub>MSY</sub> and MSY B<sub>trigger</sub> reference points per ICES CM 2004/ACFM:22.
@@ -112,9 +116,9 @@ To test threshold robustness, all 24 stocks were classified under three proxy/IC
 
 ## Key Findings
 
-- **6 of 10 assessable ICES stocks** (60%) have SSB/MSY B<sub>trigger</sub> < 1 or F/F<sub>MSY</sub> > 1 (sprat and capelin excluded — no applicable F/F<sub>MSY</sub> reference point)
-- **North Sea cod** (cod.27.47d20): F/F<sub>MSY</sub> = 0.882, SSB/MSY B<sub>trigger</sub> = 0.554 — classified Depleted; biomass remains below MSY B<sub>trigger</sub> despite fishing mortality below F<sub>MSY</sub>
-- **European plaice** (ple.27.420): SSB/MSY B<sub>trigger</sub> = 1.885 — the only stock well above its biomass trigger, classified Recovering
+- **7 of 10 assessable ICES stocks** (70%) have SSB/MSY B<sub>trigger</sub> < 1 or F/F<sub>MSY</sub> > 1 (sprat and capelin excluded — no applicable F/F<sub>MSY</sub> reference point; stocks flagged: NS cod, NS herring, NE Atlantic mackerel, blue whiting, saithe, Norwegian spring herring, Arctic cod)
+- **North Sea cod** (cod.27.46a7d20, Southern Substock): F/F<sub>MSY</sub> = 2.567, SSB/MSY B<sub>trigger</sub> = 0.448 — classified Collapsed; heavily overfished (F well above F<sub>MSY</sub>) with biomass well below the precautionary trigger
+- **European plaice** (ple.27.420): SSB/MSY B<sub>trigger</sub> = 1.908 — the only stock well above its biomass trigger, classified Recovering
 - **5 of 11 assessable proxy stocks** are Collapsed or Overexploited (FAO pipeline, new threshold C/C<sub>max</sub> < 0.10 for Collapsed per Kleisner & Pauly 2011): Atlantic cod FAO 21 (D = 0.024, τ = −0.287), American plaice (D = 0.013, τ = −0.900), Atlantic horse mackerel (D = 0.175, τ = −0.807), Sandeels (D = 0.190, τ = −0.601), Atlantic wolffish (D = 0.441, τ = −0.469)
 - **4 additional proxy stocks** (European sprat, Atlantic herring, Haddock, Yellowtail flounder) are Depleted (D = 0.10–0.50); Haddock has a significant positive trend (τ = +0.373, p = 0.002) but depletion ratio is below 0.50 — consistent with catch-based proxy bias documented in Branch et al. (2011)
 - **2 proxy stocks** show strong recovery signals: Atlantic mackerel (D = 0.848, τ = +0.408, p < 0.001) and Blue whiting (D = 0.593, τ = +0.251, p = 0.038)
@@ -150,11 +154,21 @@ Six species overlap between the two tracks. Statistics are computed for four geo
 
 n=4 is too small for statistical inference. This is a descriptive finding, not a hypothesis test.
 
+**ICES 2025 GNS ecoregion cross-check [12]** (categorical flags from Figure 12 and Annex Table A1; no numerical values in PDF):
+
+| Metric | Result |
+|---|---|
+| Stressed/not-stressed agreement vs ICES 2025 categorical status | 5/7 |
+| Excluded | NS cod (stock code restructured — see Limitations); European sprat (Data-limited) |
+| Mismatches | Common sole (SAG 2023 SSB below trigger; 2025 shows recovery above trigger); Saithe (SAG 2023 F below F<sub>MSY</sub>; 2025 shows F above) |
+
+Both mismatches reflect data-vintage differences (SAG 2023 vs 2025 assessment year), not methodological error. Script: `scripts/ices_official_status_check.ts`.
+
 The systematic disagreement is consistent with theoretical predictions for catch-based stock status methods applied to quota-managed fisheries (Branch et al. 2011; Carruthers et al. 2012). The pattern runs in opposite directions for different failure modes:
 
 - **Atlantic mackerel and blue whiting**: rising catches during active fishing pressure (depletion ratios 0.85 and 0.59, positive Mann-Kendall trends) interpreted as recovery by the proxy → Recovering. ICES F/F<sub>MSY</sub> = 1.17 and 1.61 confirm overfishing → both Declining. The proxy cannot distinguish biomass rebuilding from quota-driven catch increases.
-- **Haddock**: post-2013 catch reduction (likely TAC-driven, ~30% drop) interpreted as biomass depletion by the proxy → Depleted. ICES SSB/MSY B<sub>trigger</sub> = 2.79 shows the stock is well above its biomass trigger → Recovering. The proxy misclassifies stocks whose catches decline because of management, not population collapse.
-- **North Sea herring**: stable recent catches at ~42% of historical peak read as depleted by the proxy → Depleted. ICES SSB/MSY B<sub>trigger</sub> = 1.20 confirms the stock is above its biomass trigger → Recovering. Flat catch at quota reflects managed restraint, not low abundance.
+- **Haddock**: post-2013 catch reduction (likely TAC-driven, ~30% drop) interpreted as biomass depletion by the proxy → Depleted. ICES SSB/MSY B<sub>trigger</sub> = 4.016 shows the stock is well above its biomass trigger → Recovering. The proxy misclassifies stocks whose catches decline because of management, not population collapse.
+- **North Sea herring**: stable recent catches at ~42% of historical peak read as depleted by the proxy → Depleted. ICES SSB/MSY B<sub>trigger</sub> = 1.377 confirms the stock is above its biomass trigger → Recovering. Flat catch at quota reflects managed restraint, not low abundance.
 
 Cod excluded from statistics (geographic mismatch). Sprat excluded (Data-limited). See Methods section for full pair definitions.
 
@@ -189,14 +203,18 @@ npm run dev
 
 | Source | Coverage | License |
 |---|---|---|
-| ICES Stock Assessment Database [1] | Area 27, 12 stocks, 2023 assessments | CC BY 4.0 |
+| ICES Stock Assessment Database [1] | Area 27, 12 stocks, 2025 assessments (SAG 2023 fallback for cap.27.1-2 and cod.27.1-2) | CC BY 4.0 |
 | FAO FishStat [3] | Areas 21 & 27, catch series 1950–2023 | CC BY-NC-SA 3.0 IGO |
 
-Values were manually transcribed at time of writing (May 2026). Verify against primary sources before citing.
+ICES SAG values are fetched programmatically via the ICES SAG API (`scripts/fetch_ices_sag.R`; `scripts/generate_ices_stocks.ts` converts to TypeScript). Two stocks not published via the SAG API (cap.27.1-2 and cod.27.1-2 — joint Norwegian-Russian assessments) use hardcoded SAG 2023 fallback values. FAO proxy metrics are computed from the `fishstat` R package (`scripts/fetch_fao.R`), which bundles FAO Global Capture Production data with no external download required.
 
 ---
 
 ## Limitations
+
+**North Sea cod stock code restructured.** The legacy aggregate stock `cod.27.47d20` was restructured in ICES 2023 advice into three substocks: Northern (`cod.27.46a7d20NW`), Southern (`cod.27.46a7d20`), and Viking (`cod.27.46a7d20V`). This assessment uses the Southern North Sea substock (`cod.27.46a7d20`, ICES 2025 advice [12]): F/F<sub>MSY</sub> = 2.567, SSB/MSY B<sub>trigger</sub> = 0.448, classified Collapsed. The Northern and Viking substocks are not included; their exclusion means the aggregate stock-level picture is not represented.
+
+**ICES data vintage (SAG 2023).** Two stocks show discrepancies between our SAG 2023 values and ICES 2025 [12] categorical status: Common sole (our SSB/B<sub>trigger</sub> = 0.746 from SAG 2023 indicates below trigger; 2025 assessment shows recovery to above B<sub>trigger</sub>) and Saithe (our F/F<sub>MSY</sub> = 0.901 was below F<sub>MSY</sub> in 2023; 2025 assessment indicates F slightly above F<sub>MSY</sub>). Cross-check script: `scripts/ices_official_status_check.ts`.
 
 **Catch ≠ biomass.** The depletion ratio uses catch series as a relative biomass proxy. Catch trends reflect fishing effort, quota management, market dynamics, and reporting changes — not stock biomass directly. This ambiguity is explicitly documented in Branch et al. [6] and Carruthers et al. [7], who show that catch-based methods can misclassify stock status relative to formal assessments.
 
@@ -219,6 +237,7 @@ Values were manually transcribed at time of writing (May 2026). Verify against p
 9. Kendall MG. *Rank Correlation Methods*. 4th ed. London: Charles Griffin; 1975.
 10. ICES. The ICES approach to MSY. ICES CM 2004/ACFM:22. Copenhagen: ICES; 2004.
 11. European Commission. Regulation (EU) No 1380/2013 of the European Parliament and of the Council on the Common Fisheries Policy. *OJ L* 354/22; 2013.
+12. ICES. 2025. Greater North Sea ecoregion – fisheries overview. In Report of the ICES Advisory Committee, 2025. ICES Advice 2025, section 9.2. [doi:10.17895/ices.advice.30710897](https://doi.org/10.17895/ices.advice.30710897)
 
 ---
 
