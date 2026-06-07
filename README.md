@@ -5,6 +5,14 @@ Dual-track sustainability assessment of 24 commercial fish stocks across ICES Ar
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-GitHub%20Pages-1D9E75?style=flat-square)](https://alvaropenuelas.github.io/fisheries-sustainability-assessment/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-1a2e3a?style=flat-square)](LICENSE)
 
+> **Scope.** This is an educational data-synthesis and visualization project
+> combining published **ICES Stock Assessment Graphs (SAG)** reference points
+> with **FAO FishStat** capture data. It is **not** a formal stock assessment and
+> does not follow the ICES Transparent Assessment Framework (TAF), which governs
+> official ICES advisory products. For authoritative stock status and management
+> advice, consult [ICES Advice](https://www.ices.dk/advice) and
+> [ICES SAG](https://standardgraphs.ices.dk).
+
 ---
 
 ## Research Question
@@ -100,9 +108,15 @@ Collapsed threshold (C/C<sub>max</sub> < 0.10) follows Kleisner & Pauly (2011) S
 | Recovering | ≥ 0.50 | > 0.20 | < 0.05 |
 | Stable | all other | — | — |
 
-### Note on the "Declining" label
-
-The same label has different meanings across the two tracks. In the ICES track, "Declining" indicates fishing pressure above F<sub>MSY</sub> (F/F<sub>MSY</sub> > 1.1) regardless of current biomass — e.g. North Sea herring (F/F<sub>MSY</sub>=1.26, SSB/B<sub>trigger</sub>=1.38) is Declining because pressure is too high, even though biomass is well above the trigger. In the proxy track, "Declining" means a statistically significant downward trend in catches (Mann-Kendall τ < −0.20, p < 0.05). The same label reflects pressure in one track and trend in the other; this is a limitation of the 6-category scheme.
+> **Note on "Declining".** This label carries a different meaning in each track.
+> In the **ICES track** it reflects fishing *pressure* (F/F_MSY > 1.1) and is an
+> early warning of overfishing — the stock's biomass may still be healthy
+> (e.g. North Sea herring: F/F_MSY ≈ 1.26 but SSB/MSY B_trigger ≈ 1.38). In the
+> **proxy track** it reflects a statistically significant downward *catch-volume*
+> trend (Mann-Kendall τ < −0.20, p < 0.05). The two are not directly comparable:
+> an ICES "Declining" stock may be abundant but currently overfished, whereas a
+> proxy "Declining" stock shows a sustained drop in landings of unknown absolute
+> cause. Compare within a track, not across tracks.
 
 ### Threshold sensitivity
 
@@ -206,7 +220,24 @@ npm run dev
 | ICES Stock Assessment Database [1] | Area 27, 12 stocks, 2025 assessments (SAG 2023 fallback for cap.27.1-2 and cod.27.1-2) | CC BY 4.0 |
 | FAO FishStat [3] | Areas 21 & 27, catch series 1950–2023 | CC BY-NC-SA 3.0 IGO |
 
-ICES SAG values are fetched programmatically via the ICES SAG API (`scripts/fetch_ices_sag.R`; `scripts/generate_ices_stocks.ts` converts to TypeScript). Two stocks not published via the SAG API (cap.27.1-2 and cod.27.1-2 — joint Norwegian-Russian assessments) use hardcoded SAG 2023 fallback values. FAO proxy metrics are computed from the `fishstat` R package (`scripts/fetch_fao.R`), which bundles FAO Global Capture Production data with no external download required.
+### Data provenance
+
+- **ICES track** (12 stocks): F, SSB, F<sub>MSY</sub>, and MSY B<sub>trigger</sub>
+  are pulled from the ICES SAG web services by `scripts/fetch_ices_sag.R` and
+  converted to TypeScript by `scripts/generate_ices_stocks.ts` (assessment year
+  2025, terminal data through 2024), and written to
+  `src/data/icesStocksGenerated.ts`. Two stocks not published via the SAG API
+  (cap.27.1-2 and cod.27.1-2 — joint Norwegian-Russian assessments) use hardcoded
+  SAG 2023 fallback values. Values were cross-checked against
+  [ICES SAG](https://standardgraphs.ices.dk) on 2026-06-07.
+- **Proxy track** (12 stocks): FAO FishStat capture data (bundled in the
+  `fishstat` R package) processed by `scripts/fetch_fao.R` and
+  `scripts/generate_proxy_stocks.ts`, written to
+  `src/data/proxyStocksGenerated.ts`.
+- **Regeneration is manual**, not part of the build: run `npm run fetch-ices-sag`
+  + `npm run generate-ices` (ICES) and `npm run fetch-fao` +
+  `npm run generate-proxy` (proxy) to refresh data. The committed `*Generated.ts`
+  files reflect the last manual run.
 
 ---
 

@@ -312,13 +312,19 @@ export default function ProxyScatter() {
               { label: 'Collapsed (C/Cmax < 0.25)', color: '#B33A3A' },
               { label: 'Overexploited (depleted, declining)', color: '#C77D2E' },
               { label: 'Depleted (< 50%, no sig. trend)', color: '#D9A856' },
-              { label: 'Declining (sig. downward trend)', color: '#6B8FAE' },
+              {
+                label: 'Declining (sig. downward trend)',
+                color: '#6B8FAE',
+                tooltip:
+                  '"Declining" means different things per track: ICES = high fishing pressure (F/FMSY > 1.1, biomass may be healthy); Proxy = falling catch-volume trend (Mann-Kendall τ < -0.20). Not comparable across tracks.',
+              },
               { label: 'Recovering (sig. upward trend)', color: '#2C6E4F' },
               { label: 'Stable', color: '#4A8B6F' },
               { label: 'Data-limited (excluded from analysis)', color: '#8A8A82' },
-            ].map(({ label, color }) => (
+            ].map(({ label, color, tooltip }) => (
               <div
                 key={label}
+                title={tooltip}
                 className="flex items-start gap-2 p-2 border"
                 style={{ borderColor: c.border, transition: 'border-color 300ms ease' }}
               >
