@@ -309,7 +309,7 @@ export default function ProxyScatter() {
 
           <div className="grid grid-cols-2 gap-2 mt-4 max-w-lg">
             {[
-              { label: 'Collapsed (C/Cmax < 0.25)', color: '#B33A3A' },
+              { label: 'Collapsed (C/Cmax < 0.10)', color: '#B33A3A' },
               { label: 'Overexploited (depleted, declining)', color: '#C77D2E' },
               { label: 'Depleted (< 50%, no sig. trend)', color: '#D9A856' },
               {
